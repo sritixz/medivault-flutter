@@ -4,6 +4,7 @@ import '../../core/data/mock_data.dart';
 import '../../core/models/medical_record.dart';
 import '../../providers/app_state.dart';
 import '../widgets/common_widgets.dart';
+import '../camera/document_camera_screen.dart';
 
 class UploadRecordScreen extends StatefulWidget {
   final AppState state;
@@ -193,7 +194,18 @@ class _UploadRecordScreenState extends State<UploadRecordScreen> {
                     ),
                     icon: const Icon(Icons.camera_alt),
                     label: const Text('Scan document'),
-                    onPressed: () => _simulateFilePick('Scanned_Prescription_${DateTime.now().day}Nov.pdf', 'PDF'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DocumentCameraScreen(
+                            onCaptureCompleted: (pages) {
+                              _simulateFilePick(pages.first, 'Image');
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(width: 12),

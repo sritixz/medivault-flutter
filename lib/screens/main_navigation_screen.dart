@@ -16,6 +16,10 @@ import 'dental/dental_screen.dart';
 import 'preventive/preventive_screen.dart';
 import 'appointments/appointments_screen.dart';
 import 'search/search_screen.dart';
+import 'plans/membership_screen.dart';
+import 'privacy/privacy_screen.dart';
+import 'notifications/notification_preferences_screen.dart';
+import 'auth/auth_flow_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   final AppState state;
@@ -70,6 +74,31 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         break;
       case 'search':
         screen = SearchScreen(state: widget.state);
+        break;
+      case 'plans':
+        screen = MembershipScreen(state: widget.state);
+        break;
+      case 'privacy':
+        screen = PrivacyScreen(
+          state: widget.state,
+          onOpenSharing: () => _navigateToRoute('sharing'),
+        );
+        break;
+      case 'notifications':
+        screen = const NotificationPreferencesScreen();
+        break;
+      case 'session-expired':
+        screen = AuthFlowScreen(
+          state: widget.state,
+          isSessionExpiredPreview: true,
+          onCompleted: () => Navigator.pop(context),
+        );
+        break;
+      case 'login':
+        screen = AuthFlowScreen(
+          state: widget.state,
+          onCompleted: () => Navigator.pop(context),
+        );
         break;
       default:
         return;

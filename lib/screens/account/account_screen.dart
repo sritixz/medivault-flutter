@@ -15,6 +15,8 @@ class AccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final initials = state.userName.split(' ').map((s) => s.isNotEmpty ? s[0] : '').take(2).join();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Account'),
@@ -33,9 +35,9 @@ class AccountScreen extends StatelessWidget {
                     CircleAvatar(
                       radius: 28,
                       backgroundColor: AppColors.toneMintBg,
-                      child: const Text(
-                        'VS',
-                        style: TextStyle(
+                      child: Text(
+                        initials.isNotEmpty ? initials : 'VS',
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: AppColors.toneMintText,
@@ -43,21 +45,28 @@ class AccountScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Vikram Sharma',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                            state.userName,
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
                           ),
-                          SizedBox(height: 2),
+                          const SizedBox(height: 2),
                           Text(
-                            'vikram@example.com',
-                            style: TextStyle(fontSize: 13, color: AppColors.onSurfaceVariant),
+                            state.userEmail,
+                            style: const TextStyle(fontSize: 13, color: AppColors.onSurfaceVariant),
                           ),
-                          SizedBox(height: 6),
-                          StatusBadge(text: 'Family Admin', tone: 'mint'),
+                          const SizedBox(height: 6),
+                          Row(
+                            children: [
+                              const StatusBadge(text: 'Family Admin', tone: 'mint'),
+                              const SizedBox(width: 6),
+                              if (state.isMemberPlanActive)
+                                const StatusBadge(text: 'Member Plan', tone: 'blue'),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -111,7 +120,7 @@ class AccountScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Settings & Preferences
+            // Settings & Plans
             const Text(
               'Settings & Plans',
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: AppColors.onSurfaceVariant),
@@ -120,7 +129,9 @@ class AccountScreen extends StatelessWidget {
             _buildActionTile(
               icon: Icons.card_membership_outlined,
               title: 'Membership Plans',
-              subtitle: 'Free & INR 499 / member / month',
+              subtitle: state.isMemberPlanActive
+                  ? '${state.subscribedMembers.length} members · ₹${state.subscribedMembers.length * 499}/mo'
+                  : 'Free & INR 499 / member / month',
               onTap: () => onNavigateRoute('plans'),
             ),
             _buildActionTile(
@@ -135,6 +146,38 @@ class AccountScreen extends StatelessWidget {
               subtitle: 'Medicine & appointment alerts',
               onTap: () => onNavigateRoute('notifications'),
             ),
+            _buildActionTile(
+              icon: Icons.lock_clock_outlined,
+              title: 'Session Recovery Preview',
+              subtitle: 'Simulate session expiration & re-login',
+              onTap: () => onNavigateRoute('session-expired'),
+            ),
+            const SizedBox(height: 12),
+
+            // Log out / Onboarding option
+            Card(
+              child: ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.logout, color: AppColors.primary, size: 22),
+                ),
+                title: const Text(
+                  'Switch Account / Replay Onboarding',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                ),
+                subtitle: const Text(
+                  'View the 3 onboarding slides & demo OTP flow',
+                  style: TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant),
+                ),
+                trailing: const Icon(Icons.chevron_right, color: AppColors.outline, size: 18),
+                onTap: () => onNavigateRoute('login'),
+              ),
+            ),
+
             const SizedBox(height: 24),
             Center(
               child: Text(

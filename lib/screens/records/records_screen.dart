@@ -5,6 +5,8 @@ import '../../core/models/medical_record.dart';
 import '../../core/models/family_member.dart';
 import '../../providers/app_state.dart';
 import '../widgets/common_widgets.dart';
+import 'document_detail_screen.dart';
+import '../sharing/sharing_screen.dart';
 
 class RecordsScreen extends StatefulWidget {
   final AppState state;
@@ -317,114 +319,20 @@ class _RecordsScreenState extends State<RecordsScreen> {
   }
 
   void _showRecordDetail(BuildContext context, MedicalRecord record, FamilyMember member) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (ctx) {
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceVariant,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryFixed.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(Icons.description, color: AppColors.primary, size: 28),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          record.title,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-                        ),
-                        Text(
-                          '${record.provider} · ${record.date}',
-                          style: const TextStyle(fontSize: 13, color: AppColors.onSurfaceVariant),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              const Divider(),
-              const SizedBox(height: 12),
-              _buildDetailRow('Family member', member.name),
-              _buildDetailRow('Category', record.category),
-              _buildDetailRow('File type', record.type),
-              if (record.notes.isNotEmpty) _buildDetailRow('Notes', record.notes),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      icon: const Icon(Icons.archive_outlined),
-                      label: Text(record.archived ? 'Unarchive' : 'Archive'),
-                      onPressed: () {
-                        widget.state.toggleArchive(record.id);
-                        Navigator.pop(ctx);
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
-                      ),
-                      icon: const Icon(Icons.visibility),
-                      label: const Text('Open Document'),
-                      onPressed: () {
-                        Navigator.pop(ctx);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Opening ${record.title}...')),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13)),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-        ],
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => DocumentDetailScreen(
+          record: record,
+          member: member,
+          state: widget.state,
+          onShare: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => SharingScreen(state: widget.state)),
+            );
+          },
+        ),
       ),
     );
   }

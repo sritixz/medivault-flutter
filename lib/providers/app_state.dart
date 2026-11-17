@@ -17,6 +17,14 @@ class AppState extends ChangeNotifier {
   String _searchQuery = '';
   final Set<int> _takenMedicines = {};
 
+  // Auth & Account State
+  bool _isLoggedIn = true;
+  String _userName = 'Vikram Sharma';
+  String _userEmail = 'vikram@example.com';
+  bool _isMemberPlanActive = false;
+  List<String> _subscribedMembers = ['vikram'];
+  bool _remindersEnabled = true;
+
   // Getters
   List<FamilyMember> get members => _members;
   List<MedicalRecord> get records => _records;
@@ -27,6 +35,13 @@ class AppState extends ChangeNotifier {
   String get selectedCategory => _selectedCategory;
   String get searchQuery => _searchQuery;
   Set<int> get takenMedicines => _takenMedicines;
+
+  bool get isLoggedIn => _isLoggedIn;
+  String get userName => _userName;
+  String get userEmail => _userEmail;
+  bool get isMemberPlanActive => _isMemberPlanActive;
+  List<String> get subscribedMembers => _subscribedMembers;
+  bool get remindersEnabled => _remindersEnabled;
 
   FamilyMember? get activeMember {
     if (_selectedMemberId == 'all') return _members.first;
@@ -62,7 +77,31 @@ class AppState extends ChangeNotifier {
     return _medicines.where((m) => !m.stopped && !m.completed && (_selectedMemberId == 'all' || m.memberId == _selectedMemberId)).toList();
   }
 
-  // Actions
+  // Auth actions
+  void login({required String name, required String email}) {
+    _isLoggedIn = true;
+    _userName = name;
+    _userEmail = email;
+    notifyListeners();
+  }
+
+  void logout() {
+    _isLoggedIn = false;
+    notifyListeners();
+  }
+
+  void setPlan({required bool active, required List<String> memberIds}) {
+    _isMemberPlanActive = active;
+    _subscribedMembers = List.from(memberIds);
+    notifyListeners();
+  }
+
+  void toggleReminders() {
+    _remindersEnabled = !_remindersEnabled;
+    notifyListeners();
+  }
+
+  // Member & Category actions
   void setMember(String memberId) {
     _selectedMemberId = memberId;
     notifyListeners();
@@ -90,6 +129,14 @@ class AppState extends ChangeNotifier {
   void addRecord(MedicalRecord record) {
     _records.insert(0, record);
     notifyListeners();
+  }
+
+  void updateRecord(MedicalRecord updated) {
+    final index = _records.indexWhere((r) => r.id == updated.id);
+    if (index != -1) {
+      _records[index] = updated;
+      notifyListeners();
+    }
   }
 
   void toggleBookmark(int recordId) {

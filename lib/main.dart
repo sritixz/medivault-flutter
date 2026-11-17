@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
 import 'providers/app_state.dart';
 import 'screens/main_navigation_screen.dart';
+import 'screens/auth/auth_flow_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +34,15 @@ class _MediVaultAppState extends State<MediVaultApp> {
           title: 'MediVault',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
-          home: MainNavigationScreen(state: _appState),
+          home: _appState.isLoggedIn
+              ? MainNavigationScreen(state: _appState)
+              : AuthFlowScreen(
+                  state: _appState,
+                  onCompleted: () => _appState.login(
+                    name: _appState.userName,
+                    email: _appState.userEmail,
+                  ),
+                ),
         );
       },
     );
