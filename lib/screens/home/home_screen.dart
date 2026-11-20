@@ -271,6 +271,10 @@ class HomeScreen extends StatelessWidget {
             _buildLongitudinalHealthRecord(context),
             const SizedBox(height: 20),
 
+            // Block 2 & 3: Health Records & Locker (My, Family, Dental & Lab Records)
+            _buildHealthRecordsLockerSection(context),
+            const SizedBox(height: 20),
+
             // Utility Cards: Timeline & Appointments
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -1203,6 +1207,176 @@ class HomeScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 10, color: Color(0xFF64748B)),
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHealthRecordsLockerSection(BuildContext context) {
+    final myRecords = state.records.where((r) => r.memberId == 'vikram' && !r.archived).length;
+    final familyRecords = state.records.where((r) => !r.archived).length;
+    final dentalRecords = state.records.where((r) => r.category.toLowerCase().contains('dental') && !r.archived).length;
+    final labRecords = state.records.where((r) => r.category.toLowerCase().contains('lab') && !r.archived).length;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.folder_shared, color: Colors.white, size: 16),
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Health Records & Locker',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.onSurface,
+                ),
+              ),
+              const Spacer(),
+              TextButton.icon(
+                onPressed: () => onNavigateTab(1),
+                icon: const Text('View locker'),
+                label: const Icon(Icons.chevron_right, size: 16),
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  padding: EdgeInsets.zero,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 1.5,
+            children: [
+              _buildLockerQuickCard(
+                title: 'My Records',
+                count: '$myRecords records',
+                icon: Icons.person_pin,
+                color: const Color(0xFF0D9488),
+                bgTone: const Color(0xFFF0FDFA),
+                onTap: () {
+                  state.setMember('vikram');
+                  state.setCategory('All records');
+                  onNavigateTab(1);
+                },
+              ),
+              _buildLockerQuickCard(
+                title: 'Family Records',
+                count: '$familyRecords records',
+                icon: Icons.family_restroom,
+                color: const Color(0xFF2563EB),
+                bgTone: const Color(0xFFEFF6FF),
+                onTap: () {
+                  state.setMember('all');
+                  state.setCategory('All records');
+                  onNavigateTab(1);
+                },
+              ),
+              _buildLockerQuickCard(
+                title: 'Dental Records',
+                count: '$dentalRecords checkups',
+                icon: Icons.health_and_safety,
+                color: const Color(0xFF059669),
+                bgTone: const Color(0xFFECFDF5),
+                onTap: () {
+                  state.setCategory('Dental');
+                  onNavigateTab(1);
+                },
+              ),
+              _buildLockerQuickCard(
+                title: 'Lab Reports',
+                count: '$labRecords test files',
+                icon: Icons.science,
+                color: const Color(0xFF7C3AED),
+                bgTone: const Color(0xFFF5F3FF),
+                onTap: () {
+                  state.setCategory('Lab reports');
+                  onNavigateTab(1);
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLockerQuickCard({
+    required String title,
+    required String count,
+    required IconData icon,
+    required Color color,
+    required Color bgTone,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: bgTone,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.05),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(icon, color: color, size: 18),
+                ),
+                const Spacer(),
+                Icon(Icons.arrow_forward_ios, size: 12, color: color.withValues(alpha: 0.6)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w800,
+                color: color.withValues(alpha: 0.95),
+              ),
+            ),
+            Text(
+              count,
+              style: const TextStyle(
+                fontSize: 11,
+                color: AppColors.onSurfaceVariant,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
