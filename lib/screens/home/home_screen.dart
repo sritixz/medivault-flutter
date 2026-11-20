@@ -128,7 +128,7 @@ class HomeScreen extends StatelessWidget {
               child: Row(
                 children: [
                   StatusBadge(
-                    icon: Icons.family_restroom,
+                    icon: Icons.people_outline,
                     text: '${state.members.length} family profiles',
                     tone: 'mint',
                   ),
@@ -141,14 +141,26 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 18),
 
-            // Section Header
+            // Hero Promo Banner (Offers & Discounts / Image 1 Match)
+            _buildHeroBanner(),
+            const SizedBox(height: 22),
+
+            // Section Header matching Image 1
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: const BoxDecoration(
+                      color: AppColors.activePillTeal,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.monitor_heart, color: Colors.white, size: 16),
+                  ),
+                  const SizedBox(width: 8),
                   const Text(
                     'Essential Healthcare',
                     style: TextStyle(
@@ -157,6 +169,7 @@ class HomeScreen extends StatelessWidget {
                       color: AppColors.onSurface,
                     ),
                   ),
+                  const Spacer(),
                   TextButton.icon(
                     onPressed: () => onNavigateTab(3), // Account
                     icon: const Text('All features'),
@@ -570,6 +583,69 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeroBanner() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      height: 112,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF0B6D55).withValues(alpha: 0.22),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Image.asset(
+          'assets/images/hero_banner.png',
+          width: double.infinity,
+          height: double.infinity,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => Container(
+            decoration: const BoxDecoration(
+              gradient: AppColors.heroBannerGradient,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: const Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Your Health.\nOur Priority.',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                          height: 1.15,
+                        ),
+                      ),
+                      SizedBox(height: 6),
+                      Text(
+                        'Stay Healthy • Live Better',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.favorite, size: 54, color: Colors.white),
+              ],
+            ),
+          ),
         ),
       ),
     );
