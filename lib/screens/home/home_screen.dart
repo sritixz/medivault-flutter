@@ -321,6 +321,10 @@ class HomeScreen extends StatelessWidget {
             _buildHealthOffersSection(context),
             const SizedBox(height: 20),
 
+            // Block 8: Mediclaim Policy Details
+            _buildMediclaimPolicySection(context),
+            const SizedBox(height: 20),
+
             // Family Members Row
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -2192,6 +2196,318 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
                 child: const Text('Place Order (Cash on Delivery / UPI)'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMediclaimPolicySection(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF1E293B),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.shield, color: Colors.white, size: 16),
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Mediclaim Policy Details',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.onSurface,
+                ),
+              ),
+              const Spacer(),
+              TextButton(
+                onPressed: () => _showMediclaimCardModal(context),
+                child: const Text('View E-Card'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Insurance Card
+          Container(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF0F172A).withValues(alpha: 0.25),
+                  blurRadius: 12,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(Icons.health_and_safety, color: Color(0xFF38BDF8), size: 20),
+                        ),
+                        const SizedBox(width: 10),
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Star Health & Allied',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 14,
+                              ),
+                            ),
+                            Text(
+                              'Family Optima Health Plan',
+                              style: TextStyle(
+                                color: Color(0xFF94A3B8),
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF059669).withValues(alpha: 0.25),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: const Color(0xFF10B981)),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.check_circle, color: Color(0xFF34D399), size: 12),
+                          SizedBox(width: 4),
+                          Text(
+                            'Active Cashless',
+                            style: TextStyle(
+                              color: Color(0xFF34D399),
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 18),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'SUM INSURED',
+                          style: TextStyle(color: Color(0xFF94A3B8), fontSize: 10, letterSpacing: 0.8),
+                        ),
+                        const SizedBox(height: 2),
+                        const Text(
+                          '₹ 5,00,000',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'POLICY NUMBER',
+                          style: TextStyle(color: Color(0xFF94A3B8), fontSize: 10, letterSpacing: 0.8),
+                        ),
+                        const SizedBox(height: 2),
+                        const Text(
+                          'SH-829104-MV',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        const Text(
+                          'VALID TILL',
+                          style: TextStyle(color: Color(0xFF94A3B8), fontSize: 10, letterSpacing: 0.8),
+                        ),
+                        const SizedBox(height: 2),
+                        const Text(
+                          '31 Mar 2027',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Divider(color: Color(0xFF334155), height: 1),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    const Icon(Icons.people_alt_outlined, color: Color(0xFF94A3B8), size: 14),
+                    const SizedBox(width: 6),
+                    const Text(
+                      '4 Family Members Covered · TPA Cashless',
+                      style: TextStyle(color: Color(0xFFCBD5E1), fontSize: 11),
+                    ),
+                    const Spacer(),
+                    InkWell(
+                      onTap: () => _showMediclaimCardModal(context),
+                      child: const Row(
+                        children: [
+                          Text(
+                            'Digital Card',
+                            style: TextStyle(
+                              color: Color(0xFF38BDF8),
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Icon(Icons.chevron_right, size: 14, color: Color(0xFF38BDF8)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showMediclaimCardModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                const Icon(Icons.badge, color: Color(0xFF0284C7)),
+                const SizedBox(width: 8),
+                const Text(
+                  'Digital Mediclaim E-Card',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                ),
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(ctx),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0F172A),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'STAR HEALTH INSURANCE',
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14),
+                      ),
+                      Text('TPA CASHLESS', style: TextStyle(color: Color(0xFF38BDF8), fontWeight: FontWeight.bold, fontSize: 11)),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Text('Primary Insured: Vikram Sharma', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
+                  Text('Dependents: Pooja Sharma, Aarav Sharma, Deepak Sharma', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 11)),
+                  SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Policy # SH-829104-MV', style: TextStyle(color: Colors.white70, fontSize: 12, fontFamily: 'monospace')),
+                      Text('Sum: ₹ 5,00,000', style: TextStyle(color: Color(0xFF34D399), fontWeight: FontWeight.bold, fontSize: 12)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            ListTile(
+              leading: const Icon(Icons.phone_in_talk, color: Color(0xFF059669)),
+              title: const Text('24x7 Cashless Helpline: 1800 425 2255'),
+              subtitle: const Text('Quote Policy SH-829104-MV at hospital desk'),
+              contentPadding: EdgeInsets.zero,
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  onNavigateTab(2); // Go to nearby hospitals
+                },
+                icon: const Icon(Icons.local_hospital),
+                label: const Text('Find Cashless Network Hospitals Nearby'),
               ),
             ),
           ],
