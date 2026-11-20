@@ -204,7 +204,7 @@ class HomeScreen extends StatelessWidget {
                     onTap: () => onNavigateTab(2), // Nearby tab
                   ),
                   _buildServiceCard(
-                    title: 'Emergency ...',
+                    title: 'Emergency',
                     subtitle: 'Important details, within reach',
                     badge: 'HEALTH ID',
                     tone: 'peach',
@@ -465,14 +465,16 @@ class HomeScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           child: Stack(
             children: [
-              // Floating 3D visual graphic spanning right side from top to bottom
+              // Negative top/bottom trims the neighboring-card bleed baked into the PNGs
               Positioned(
-                top: 0,
-                bottom: 0,
+                top: -12,
+                bottom: -12,
                 right: 0,
+                width: 90,
                 child: Image.asset(
                   imageAsset,
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.centerRight,
                   errorBuilder: (_, _, _) => fallbackAsset != null
                       ? Image.asset(
                           fallbackAsset,
@@ -485,7 +487,7 @@ class HomeScreen extends StatelessWidget {
 
               // Foreground card copy on the left
               Padding(
-                padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
+                padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -499,7 +501,7 @@ class HomeScreen extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 3),
+                    const SizedBox(height: 4),
                     if (badge != null)
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -516,19 +518,17 @@ class HomeScreen extends StatelessWidget {
                             letterSpacing: 0.4,
                           ),
                         ),
-                      )
-                    else
-                      const SizedBox(height: 14),
+                      ),
                     const Spacer(),
-                    SizedBox(
-                      width: 90,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 76),
                       child: Text(
                         subtitle,
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 10.5,
                           fontWeight: FontWeight.w500,
                           color: style.textColor.withValues(alpha: 0.85),
-                          height: 1.22,
+                          height: 1.25,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -621,8 +621,9 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildHeroBanner() {
     return Container(
+      width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      height: 110,
+      height: 116,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFF0F7657), Color(0xFF0B5D45), Color(0xFF074533)],
@@ -642,27 +643,26 @@ class HomeScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         child: Stack(
           children: [
-            // 3D Stethoscope Heart & Shield Graphic on the right side
             Positioned(
               top: 0,
               bottom: 0,
               right: 0,
+              width: 150,
               child: Image.asset(
                 'assets/images/hero_stethoscope_feathered.png',
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.cover,
+                alignment: Alignment.centerRight,
                 errorBuilder: (_, _, _) => const SizedBox(),
               ),
             ),
-
-            // Crisp Native Flutter Typography on the left side
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+              padding: EdgeInsets.fromLTRB(18, 14, 140, 14),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Your Health.',
+                    'Your Health.\nOur Priority.',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 19,
@@ -671,17 +671,7 @@ class HomeScreen extends StatelessWidget {
                       letterSpacing: -0.3,
                     ),
                   ),
-                  Text(
-                    'Our Priority.',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 19,
-                      fontWeight: FontWeight.w900,
-                      height: 1.15,
-                      letterSpacing: -0.3,
-                    ),
-                  ),
-                  SizedBox(height: 5),
+                  SizedBox(height: 6),
                   Text(
                     'Stay Healthy • Live Better',
                     style: TextStyle(
