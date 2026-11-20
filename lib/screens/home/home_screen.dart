@@ -19,9 +19,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeRecords = state.homeRecords;
-    final homeMedicines = state.homeMedicines;
-    final firstMedicine = homeMedicines.isNotEmpty ? homeMedicines.first : null;
-    final isTaken = firstMedicine != null && state.takenMedicines.contains(firstMedicine.id);
 
     return Scaffold(
       appBar: AppBar(
@@ -35,7 +32,7 @@ class HomeScreen extends StatelessWidget {
               width: 44,
               height: 44,
               fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) => Container(
+              errorBuilder: (_, _, _) => Container(
                 width: 44,
                 height: 44,
                 decoration: const BoxDecoration(
@@ -429,12 +426,12 @@ class HomeScreen extends StatelessWidget {
                   imageAsset,
                   height: 64,
                   fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) => fallbackAsset != null
+                  errorBuilder: (_, _, _) => fallbackAsset != null
                       ? Image.asset(
                           fallbackAsset,
                           height: 64,
                           fit: BoxFit.contain,
-                          errorBuilder: (_, __, ___) => const SizedBox(),
+                          errorBuilder: (_, _, _) => const SizedBox(),
                         )
                       : const SizedBox(),
                 ),
@@ -605,7 +602,7 @@ class HomeScreen extends StatelessWidget {
           width: double.infinity,
           height: double.infinity,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => Container(
+          errorBuilder: (_, _, _) => Container(
             decoration: const BoxDecoration(
               gradient: AppColors.heroBannerGradient,
             ),
@@ -648,7 +645,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildEmergencySosBar(BuildContext context) {
-    final emergency = state.emergencies[state.selectedMemberId ?? 'vikram'] ??
+    final emergency = state.emergencies[state.selectedMemberId] ??
         state.emergencies['vikram'];
     final contactName = emergency?.emergencyContact ?? 'Pooja Sharma';
     final contactPhone = emergency?.contactPhone ?? '+91 98765 43210';
