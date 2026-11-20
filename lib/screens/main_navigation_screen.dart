@@ -136,34 +136,59 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         index: _currentIndex,
         children: screens,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.outline,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            top: BorderSide(color: const Color(0xFFE2E8F0), width: 1),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.folder_outlined),
-            activeIcon: Icon(Icons.folder),
-            label: 'Records',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on_outlined),
-            activeIcon: Icon(Icons.location_on),
-            label: 'Nearby',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Account',
-          ),
-        ],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 10,
+              offset: const Offset(0, -3),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) => setState(() => _currentIndex = index),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          selectedItemColor: AppColors.activePillTeal,
+          unselectedItemColor: AppColors.outline,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+          type: BottomNavigationBarType.fixed,
+          items: [
+            _buildNavItem(0, Icons.home_outlined, Icons.home, 'Home'),
+            _buildNavItem(1, Icons.folder_outlined, Icons.folder, 'Records'),
+            _buildNavItem(2, Icons.location_on_outlined, Icons.location_on, 'Nearby'),
+            _buildNavItem(3, Icons.person_outline, Icons.person, 'Account'),
+          ],
+        ),
       ),
     );
+  }
+
+  BottomNavigationBarItem _buildNavItem(int index, IconData icon, IconData activeIcon, String label) {
+    final isSelected = _currentIndex == index;
+    return BottomNavigationBarItem(
+      icon: isSelected
+          ? Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFFC7F3DB),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(activeIcon, color: AppColors.activePillTeal, size: 22),
+            )
+          : Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Icon(icon, color: AppColors.outline, size: 24),
+            ),
+      label: label,
+    );
+  }
   }
 }
