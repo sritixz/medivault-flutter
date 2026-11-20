@@ -325,6 +325,10 @@ class HomeScreen extends StatelessWidget {
             _buildMediclaimPolicySection(context),
             const SizedBox(height: 20),
 
+            // Blocks 9 & 10: Health Fund & Emergency Health Loan (Coming Soon)
+            _buildHealthFundAndLoanSection(context),
+            const SizedBox(height: 20),
+
             // Family Members Row
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -2508,6 +2512,283 @@ class HomeScreen extends StatelessWidget {
                 },
                 icon: const Icon(Icons.local_hospital),
                 label: const Text('Find Cashless Network Hospitals Nearby'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHealthFundAndLoanSection(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF6366F1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.account_balance_wallet, color: Colors.white, size: 16),
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Financial Wellness',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.onSurface,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEEF2FF),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Text(
+                  'NEW BENEFITS',
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF4F46E5)),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Two Financial Cards: Block 9 & Block 10
+          Row(
+            children: [
+              // Block 9: Health Fund
+              Expanded(
+                child: _buildFinancialBenefitCard(
+                  context,
+                  title: 'MediVault Health Fund',
+                  description: 'Emergency medical savings reserve with 0% risk and instant withdrawal.',
+                  tag: 'COMING SOON',
+                  tagBg: const Color(0xFFFEF3C7),
+                  tagColor: const Color(0xFFB45309),
+                  icon: Icons.savings_outlined,
+                  color: const Color(0xFF059669),
+                  bgTone: const Color(0xFFF0FDF4),
+                  onTap: () => _showComingSoonModal(
+                    context,
+                    title: 'MediVault Health Fund',
+                    subtitle: 'Dedicated Medical Emergency Savings',
+                    details: 'Build a family medical cushion with automated recurring savings. Enjoy 0% penalties on early medical withdrawals and exclusive hospital partner discounts.',
+                    actionLabel: 'Join Early Access Waitlist',
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+
+              // Block 10: Emergency Health Loan
+              Expanded(
+                child: _buildFinancialBenefitCard(
+                  context,
+                  title: 'Emergency Health Loan',
+                  description: 'Instant medical credit up to ₹ 2,00,000 for unexpected hospitalizations.',
+                  tag: 'COMING SOON',
+                  tagBg: const Color(0xFFEDE9FE),
+                  tagColor: const Color(0xFF6D28D9),
+                  icon: Icons.credit_score_outlined,
+                  color: const Color(0xFF7C3AED),
+                  bgTone: const Color(0xFFF5F3FF),
+                  onTap: () => _showComingSoonModal(
+                    context,
+                    title: 'Emergency Health Loan',
+                    subtitle: 'Instant Cashless Medical Credit',
+                    details: 'Pre-approved collateral-free medical credit up to ₹ 2,00,000 directly disbursed to partner hospitals within 15 minutes. 100% digital KYC with zero paperwork.',
+                    actionLabel: 'Pre-Register for Credit Line',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFinancialBenefitCard(
+    BuildContext context, {
+    required String title,
+    required String description,
+    required String tag,
+    required Color tagBg,
+    required Color tagColor,
+    required IconData icon,
+    required Color color,
+    required Color bgTone,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(18),
+      child: Container(
+        height: 190,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: bgTone,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(icon, color: color, size: 20),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: tagBg,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    tag,
+                    style: TextStyle(
+                      fontSize: 8,
+                      fontWeight: FontWeight.w800,
+                      color: tagColor,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    color: color.withValues(alpha: 0.95),
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  description,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    color: AppColors.onSurfaceVariant,
+                    height: 1.3,
+                  ),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  'Learn more',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(Icons.arrow_forward_ios, size: 10, color: color),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showComingSoonModal(
+    BuildContext context, {
+    required String title,
+    required String subtitle,
+    required String details,
+    required String actionLabel,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF3C7),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: const Text(
+                'FEATURE IN EARLY PREVIEW',
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFFB45309)),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+            ),
+            Text(
+              subtitle,
+              style: const TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              details,
+              style: const TextStyle(fontSize: 13, height: 1.4, color: Color(0xFF334155)),
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('You are on the priority waitlist for $title!')),
+                  );
+                },
+                child: Text(actionLabel),
               ),
             ),
           ],
