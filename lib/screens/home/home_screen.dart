@@ -184,7 +184,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // 6 Service Cards Grid (Matching React layout)
+            // 6 Service Cards Grid (Matching Image 1 Visuals)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: GridView.count(
@@ -200,15 +200,19 @@ class HomeScreen extends StatelessWidget {
                     subtitle: 'Doctors & healthcare near you',
                     badge: 'NEARBY',
                     tone: 'mint',
-                    icon: Icons.location_on_outlined,
+                    icon: Icons.location_on,
+                    imageAsset: 'assets/images/doctor_cutout.png',
+                    fallbackAsset: 'assets/photos/doctor.jpg',
                     onTap: () => onNavigateTab(2), // Nearby tab
                   ),
                   _buildServiceCard(
-                    title: 'Emergency profile',
+                    title: 'Emergency ...',
                     subtitle: 'Important details, within reach',
                     badge: 'HEALTH ID',
                     tone: 'peach',
                     icon: Icons.health_and_safety_outlined,
+                    imageAsset: 'assets/images/ambulance_3d.png',
+                    fallbackAsset: 'assets/stitch/emergency.png',
                     onTap: () => onNavigateRoute('emergency'),
                   ),
                   _buildServiceCard(
@@ -217,6 +221,8 @@ class HomeScreen extends StatelessWidget {
                     badge: null,
                     tone: 'blue',
                     icon: Icons.people_outline,
+                    imageAsset: 'assets/images/family_field.png',
+                    fallbackAsset: 'assets/stitch/family.png',
                     onTap: () => onNavigateRoute('family'),
                   ),
                   _buildServiceCard(
@@ -224,7 +230,9 @@ class HomeScreen extends StatelessWidget {
                     subtitle: 'Your regular medicines & reminders',
                     badge: 'DAILY CARE',
                     tone: 'cream',
-                    icon: Icons.medication_outlined,
+                    icon: Icons.medical_services_outlined,
+                    imageAsset: 'assets/images/medicines_3d.png',
+                    fallbackAsset: 'assets/stitch/medicines.png',
                     onTap: () => onNavigateRoute('medicines'),
                   ),
                   _buildServiceCard(
@@ -233,6 +241,8 @@ class HomeScreen extends StatelessWidget {
                     badge: 'QUICK UPLOAD',
                     tone: 'rose',
                     icon: Icons.cloud_upload_outlined,
+                    imageAsset: 'assets/images/rx_upload.png',
+                    fallbackAsset: 'assets/stitch/upload.png',
                     onTap: () => onNavigateRoute('upload'),
                   ),
                   _buildServiceCard(
@@ -241,6 +251,8 @@ class HomeScreen extends StatelessWidget {
                     badge: 'HEALTH LOCKER',
                     tone: 'aqua',
                     icon: Icons.science_outlined,
+                    imageAsset: 'assets/images/lab_tubes.png',
+                    fallbackAsset: 'assets/stitch/labs.png',
                     onTap: () {
                       state.setCategory('Lab reports');
                       onNavigateTab(1); // Records tab
@@ -445,69 +457,115 @@ class HomeScreen extends StatelessWidget {
     required String? badge,
     required String tone,
     required IconData icon,
+    required String imageAsset,
+    String? fallbackAsset,
     required VoidCallback onTap,
   }) {
     final style = ToneStyle.getTone(tone);
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(20),
       child: Container(
-        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: style.background,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: style.borderColor),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800,
-                      color: style.textColor,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Icon(icon, color: style.textColor, size: 22),
-              ],
-            ),
-            if (badge != null)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: style.textColor.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  badge,
-                  style: TextStyle(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w800,
-                    color: style.textColor,
-                  ),
-                ),
-              ),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 11,
-                color: style.textColor.withValues(alpha: 0.85),
-                height: 1.25,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: style.borderColor, width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: style.borderColor.withValues(alpha: 0.25),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
             ),
           ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Stack(
+            children: [
+              // Floating 3D visual graphic in bottom-right corner
+              Positioned(
+                bottom: -4,
+                right: -4,
+                child: Image.asset(
+                  imageAsset,
+                  height: 64,
+                  fit: BoxShape.contain,
+                  errorBuilder: (_, __, ___) => fallbackAsset != null
+                      ? Image.asset(
+                          fallbackAsset,
+                          height: 64,
+                          fit: BoxShape.contain,
+                          errorBuilder: (_, __, ___) => const SizedBox(),
+                        )
+                      : const SizedBox(),
+                ),
+              ),
+
+              // Foreground card copy
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                              color: style.textColor,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Icon(icon, color: style.textColor, size: 18),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    if (badge != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: style.textColor.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          badge,
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w800,
+                            color: style.textColor,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      )
+                    else
+                      const SizedBox(height: 14),
+                    const SizedBox(height: 6),
+                    SizedBox(
+                      width: 95,
+                      child: Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                          color: style.textColor.withValues(alpha: 0.85),
+                          height: 1.25,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
