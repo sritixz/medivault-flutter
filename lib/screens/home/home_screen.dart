@@ -313,99 +313,12 @@ class HomeScreen extends StatelessWidget {
             _buildBookAppointmentAndNearbySection(context),
             const SizedBox(height: 20),
 
-            // Daily Medicine Reminder Strip
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: firstMedicine != null
-                  ? Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.surfaceVariant),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 44,
-                            height: 44,
-                            decoration: BoxDecoration(
-                              color: AppColors.toneCreamBg,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppColors.toneCreamBorder),
-                            ),
-                            child: const Icon(Icons.medication, color: AppColors.toneCreamText),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  firstMedicine.name,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14,
-                                    color: AppColors.onSurface,
-                                  ),
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  '${firstMedicine.dose} · ${firstMedicine.time}',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: AppColors.onSurfaceVariant,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              isTaken ? Icons.check_circle : Icons.circle_outlined,
-                              color: isTaken ? AppColors.secondary : AppColors.outline,
-                              size: 28,
-                            ),
-                            onPressed: () => state.toggleMedicineTaken(firstMedicine.id),
-                          ),
-                        ],
-                      ),
-                    )
-                  : InkWell(
-                      onTap: () => onNavigateRoute('medicines'),
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.surfaceVariant),
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(Icons.medication_outlined, color: AppColors.outline),
-                            SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'No medicine schedule yet',
-                                    style: TextStyle(fontWeight: FontWeight.w700),
-                                  ),
-                                  Text(
-                                    'Add medicines to receive reminders',
-                                    style: TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Icon(Icons.chevron_right, color: AppColors.outline),
-                          ],
-                        ),
-                      ),
-                    ),
-            ),
+            // Block 7: Regular Medicines & Order Medicine Online
+            _buildRegularMedicinesSection(context),
+            const SizedBox(height: 20),
+
+            // Block 6: Healthcare Offers & Preventive Discounts
+            _buildHealthOffersSection(context),
             const SizedBox(height: 20),
 
             // Family Members Row
@@ -1797,6 +1710,488 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
                 child: const Text('Confirm Appointment'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRegularMedicinesSection(BuildContext context) {
+    final medicines = state.homeMedicines;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFE2E8F0)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFD97706),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.medication, color: Colors.white, size: 16),
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'Regular Medicines',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.onSurface,
+                  ),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () => onNavigateRoute('medicines'),
+                  child: const Text('Manage'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+
+            if (medicines.isEmpty)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  'No medicines scheduled for this profile.',
+                  style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13),
+                ),
+              )
+            else
+              ...medicines.map((med) {
+                final isTaken = state.takenMedicines.contains(med.id);
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFBEB),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFFDE68A)),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFEF3C7),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(Icons.medication, color: Color(0xFFB45309), size: 18),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              med.name,
+                              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                            ),
+                            Text(
+                              '${med.dose} · ${med.time}',
+                              style: const TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          isTaken ? Icons.check_circle : Icons.circle_outlined,
+                          color: isTaken ? const Color(0xFF059669) : const Color(0xFFCBD5E1),
+                          size: 26,
+                        ),
+                        onPressed: () => state.toggleMedicineTaken(med.id),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+
+            const SizedBox(height: 8),
+
+            // Order Medicine Online Action Card
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFFECFDF5), Color(0xFFD1FAE5)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFA7F3D0)),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF059669),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.local_shipping, color: Colors.white, size: 20),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'Order Medicine Online',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w800,
+                                color: Color(0xFF065F46),
+                              ),
+                            ),
+                            SizedBox(width: 6),
+                            Text(
+                              '20% OFF',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF047857),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          '2-Hour doorstep delivery from MediVault Pharmacy',
+                          style: TextStyle(fontSize: 11, color: Color(0xFF047857)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () => _showOrderMedicinesModal(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF059669),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      minimumSize: Size.zero,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text('Order Now', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHealthOffersSection(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFE11D48),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.local_offer, color: Colors.white, size: 16),
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Offers & Preventive Care',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.onSurface,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFE4E6),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Text(
+                  'LIMITED TIME',
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFFBE123C)),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Horizontal Offers Scroll
+          SizedBox(
+            height: 140,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                _buildOfferCard(
+                  title: 'Full Body Health Checkup',
+                  subtitle: '60+ tests including Lipid, Liver, Kidney & Sugar',
+                  discount: '40% OFF',
+                  price: '₹1,499',
+                  originalPrice: '₹2,500',
+                  color: const Color(0xFF0284C7),
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Full Body Health Checkup offer coupon "SAVE40" applied!')),
+                    );
+                  },
+                ),
+                _buildOfferCard(
+                  title: 'Dental Scaling & Polish',
+                  subtitle: 'Complete ultrasonic plaque removal & consultation',
+                  discount: '50% OFF',
+                  price: '₹499',
+                  originalPrice: '₹1,000',
+                  color: const Color(0xFF059669),
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Dental Care offer coupon "SMILE499" applied!')),
+                    );
+                  },
+                ),
+                _buildOfferCard(
+                  title: 'Annual Eye Screening',
+                  subtitle: 'Computer vision, refraction & glaucoma check',
+                  discount: '100% FREE',
+                  price: 'FREE',
+                  originalPrice: '₹600',
+                  color: const Color(0xFF7C3AED),
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Free Eye Screening slot unlocked for your family!')),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOfferCard({
+    required String title,
+    required String subtitle,
+    required String discount,
+    required String price,
+    required String originalPrice,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      width: 270,
+      margin: const EdgeInsets.only(right: 12),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: color.withValues(alpha: 0.25)),
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: 0.06),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    discount,
+                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: color),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    price,
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: color),
+                  ),
+                  if (originalPrice.isNotEmpty) ...[
+                    const SizedBox(width: 4),
+                    Text(
+                      originalPrice,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: AppColors.onSurfaceVariant,
+                        decoration: TextDecoration.lineThrough,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 2),
+              Text(
+                subtitle,
+                style: const TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+          InkWell(
+            onTap: onTap,
+            child: Row(
+              children: [
+                Text(
+                  'Claim Offer',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: color),
+                ),
+                const SizedBox(width: 4),
+                Icon(Icons.arrow_forward, size: 14, color: color),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showOrderMedicinesModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Row(
+              children: [
+                Icon(Icons.local_shipping, color: Color(0xFF059669)),
+                SizedBox(width: 10),
+                Text(
+                  'Order Prescribed Medicines',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Express 2-hour doorstep delivery from certified pharmacy',
+              style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFE2E8F0)),
+              ),
+              child: const Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('• Metformin 500 mg (30 Tabs)', style: TextStyle(fontWeight: FontWeight.w600)),
+                      Text('₹180'),
+                    ],
+                  ),
+                  SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('• Vitamin D 60K (4 Caps)', style: TextStyle(fontWeight: FontWeight.w600)),
+                      Text('₹140'),
+                    ],
+                  ),
+                  Divider(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Total with 20% MediVault Discount', style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('₹256', style: TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF059669))),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Order placed! Express delivery arriving in 2 hours.')),
+                  );
+                },
+                child: const Text('Place Order (Cash on Delivery / UPI)'),
               ),
             ),
           ],
