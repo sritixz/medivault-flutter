@@ -118,7 +118,7 @@ class HomeScreen extends StatelessWidget {
               selectedMemberId: state.selectedMemberId,
               onSelect: state.setMember,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
 
             // Status Chips
             Padding(
@@ -139,11 +139,11 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 14),
 
             // Hero Promo Banner (Offers & Discounts / Image 1 Match)
             _buildHeroBanner(),
-            const SizedBox(height: 22),
+            const SizedBox(height: 16),
 
             // Section Header matching Image 1
             Padding(
@@ -180,7 +180,7 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             // 6 Service Cards Grid (Matching Image 1 Visuals)
             Padding(
@@ -189,9 +189,9 @@ class HomeScreen extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 1.15,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1.45,
                 children: [
                   _buildServiceCard(
                     title: 'Find care',
@@ -199,7 +199,7 @@ class HomeScreen extends StatelessWidget {
                     badge: 'NEARBY',
                     tone: 'mint',
                     icon: Icons.location_on,
-                    imageAsset: 'assets/images/doctor_cutout.png',
+                    imageAsset: 'assets/images/art_find_care.png',
                     fallbackAsset: 'assets/photos/doctor.jpg',
                     onTap: () => onNavigateTab(2), // Nearby tab
                   ),
@@ -209,7 +209,7 @@ class HomeScreen extends StatelessWidget {
                     badge: 'HEALTH ID',
                     tone: 'peach',
                     icon: Icons.health_and_safety_outlined,
-                    imageAsset: 'assets/images/ambulance_3d.png',
+                    imageAsset: 'assets/images/art_emergency.png',
                     fallbackAsset: 'assets/stitch/emergency.png',
                     onTap: () => onNavigateRoute('emergency'),
                   ),
@@ -219,7 +219,7 @@ class HomeScreen extends StatelessWidget {
                     badge: null,
                     tone: 'blue',
                     icon: Icons.people_outline,
-                    imageAsset: 'assets/images/family_field.png',
+                    imageAsset: 'assets/images/art_family.png',
                     fallbackAsset: 'assets/stitch/family.png',
                     onTap: () => onNavigateRoute('family'),
                   ),
@@ -229,7 +229,7 @@ class HomeScreen extends StatelessWidget {
                     badge: 'DAILY CARE',
                     tone: 'cream',
                     icon: Icons.medical_services_outlined,
-                    imageAsset: 'assets/images/medicines_3d.png',
+                    imageAsset: 'assets/images/art_medicines.png',
                     fallbackAsset: 'assets/stitch/medicines.png',
                     onTap: () => onNavigateRoute('medicines'),
                   ),
@@ -239,7 +239,7 @@ class HomeScreen extends StatelessWidget {
                     badge: 'QUICK UPLOAD',
                     tone: 'rose',
                     icon: Icons.cloud_upload_outlined,
-                    imageAsset: 'assets/images/rx_upload.png',
+                    imageAsset: 'assets/images/art_easier.png',
                     fallbackAsset: 'assets/stitch/upload.png',
                     onTap: () => onNavigateRoute('upload'),
                   ),
@@ -249,7 +249,7 @@ class HomeScreen extends StatelessWidget {
                     badge: 'HEALTH LOCKER',
                     tone: 'aqua',
                     icon: Icons.science_outlined,
-                    imageAsset: 'assets/images/lab_tubes.png',
+                    imageAsset: 'assets/images/art_lab.png',
                     fallbackAsset: 'assets/stitch/labs.png',
                     onTap: () {
                       state.setCategory('Lab reports');
@@ -398,17 +398,64 @@ class HomeScreen extends StatelessWidget {
   }) {
     final style = ToneStyle.getTone(tone);
 
+    LinearGradient cardGradient;
+    switch (tone.toLowerCase()) {
+      case 'mint':
+        cardGradient = const LinearGradient(
+          colors: [Color(0xFFEEFFF2), Color(0xFFD7F4DE)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+        break;
+      case 'peach':
+        cardGradient = const LinearGradient(
+          colors: [Color(0xFFFFF1EA), Color(0xFFFCE1D0)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+        break;
+      case 'blue':
+        cardGradient = const LinearGradient(
+          colors: [Color(0xFFEAF6FF), Color(0xFFD6EDFB)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+        break;
+      case 'cream':
+        cardGradient = const LinearGradient(
+          colors: [Color(0xFFFBF8E6), Color(0xFFF6E8BF)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+        break;
+      case 'rose':
+        cardGradient = const LinearGradient(
+          colors: [Color(0xFFFFF0F4), Color(0xFFFCE0E6)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+        break;
+      case 'aqua':
+      default:
+        cardGradient = const LinearGradient(
+          colors: [Color(0xFFF0FAFE), Color(0xFFD5F2F7)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+        break;
+    }
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
       child: Container(
         decoration: BoxDecoration(
-          color: style.background,
+          gradient: cardGradient,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: style.borderColor, width: 1),
+          border: Border.all(color: style.borderColor.withValues(alpha: 0.6), width: 1),
           boxShadow: [
             BoxShadow(
-              color: style.borderColor.withValues(alpha: 0.25),
+              color: style.borderColor.withValues(alpha: 0.22),
               blurRadius: 6,
               offset: const Offset(0, 3),
             ),
@@ -418,18 +465,17 @@ class HomeScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           child: Stack(
             children: [
-              // Floating 3D visual graphic in bottom-right corner
+              // Floating 3D visual graphic spanning right side from top to bottom
               Positioned(
-                bottom: -4,
-                right: -4,
+                top: 0,
+                bottom: 0,
+                right: 0,
                 child: Image.asset(
                   imageAsset,
-                  height: 64,
-                  fit: BoxFit.contain,
+                  fit: BoxFit.fitHeight,
                   errorBuilder: (_, _, _) => fallbackAsset != null
                       ? Image.asset(
                           fallbackAsset,
-                          height: 64,
                           fit: BoxFit.contain,
                           errorBuilder: (_, _, _) => const SizedBox(),
                         )
@@ -437,31 +483,23 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
 
-              // Foreground card copy
+              // Foreground card copy on the left
               Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            title,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w800,
-                              color: style.textColor,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Icon(icon, color: style.textColor, size: 18),
-                      ],
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                        color: style.textColor,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 3),
                     if (badge != null)
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -472,25 +510,25 @@ class HomeScreen extends StatelessWidget {
                         child: Text(
                           badge,
                           style: TextStyle(
-                            fontSize: 9,
+                            fontSize: 8.5,
                             fontWeight: FontWeight.w800,
                             color: style.textColor,
-                            letterSpacing: 0.3,
+                            letterSpacing: 0.4,
                           ),
                         ),
                       )
                     else
                       const SizedBox(height: 14),
-                    const SizedBox(height: 6),
+                    const Spacer(),
                     SizedBox(
-                      width: 95,
+                      width: 90,
                       child: Text(
                         subtitle,
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w500,
                           color: style.textColor.withValues(alpha: 0.85),
-                          height: 1.25,
+                          height: 1.22,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -584,12 +622,17 @@ class HomeScreen extends StatelessWidget {
   Widget _buildHeroBanner() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      height: 112,
+      height: 110,
       decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF0F7657), Color(0xFF0B5D45), Color(0xFF074533)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0B6D55).withValues(alpha: 0.22),
+            color: const Color(0xFF0B6D55).withValues(alpha: 0.28),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -597,48 +640,61 @@ class HomeScreen extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: Image.asset(
-          'assets/images/hero_banner.png',
-          width: double.infinity,
-          height: double.infinity,
-          fit: BoxFit.cover,
-          errorBuilder: (_, _, _) => Container(
-            decoration: const BoxDecoration(
-              gradient: AppColors.heroBannerGradient,
+        child: Stack(
+          children: [
+            // 3D Stethoscope Heart & Shield Graphic on the right side
+            Positioned(
+              top: 0,
+              bottom: 0,
+              right: 0,
+              child: Image.asset(
+                'assets/images/hero_stethoscope_feathered.png',
+                fit: BoxFit.fitHeight,
+                errorBuilder: (_, _, _) => const SizedBox(),
+              ),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: const Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Your Health.\nOur Priority.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w900,
-                          height: 1.15,
-                        ),
-                      ),
-                      SizedBox(height: 6),
-                      Text(
-                        'Stay Healthy • Live Better',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ],
+
+            // Crisp Native Flutter Typography on the left side
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Your Health.',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 19,
+                      fontWeight: FontWeight.w900,
+                      height: 1.15,
+                      letterSpacing: -0.3,
+                    ),
                   ),
-                ),
-                Icon(Icons.favorite, size: 54, color: Colors.white),
-              ],
+                  Text(
+                    'Our Priority.',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 19,
+                      fontWeight: FontWeight.w900,
+                      height: 1.15,
+                      letterSpacing: -0.3,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    'Stay Healthy • Live Better',
+                    style: TextStyle(
+                      color: Color(0xFFC7F3DB),
+                      fontSize: 12,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
