@@ -31,6 +31,7 @@ class AppState extends ChangeNotifier {
   List<MedicineItem> get medicines => _medicines;
   List<AppointmentItem> get appointments => _appointments;
   List<InsurancePolicy> get policies => _policies;
+  Map<String, EmergencyProfile> get emergencies => _emergencies;
   String get selectedMemberId => _selectedMemberId;
   String get selectedCategory => _selectedCategory;
   String get searchQuery => _searchQuery;
