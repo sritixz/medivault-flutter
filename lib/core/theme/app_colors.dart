@@ -6,6 +6,7 @@ class AppColors {
   static const Color primaryContainer = Color(0xFF0D5C75);
   static const Color primaryFixed = Color(0xFFBDE9FF);
   static const Color onPrimary = Color(0xFFFFFFFF);
+  static const Color activePillTeal = Color(0xFF0B4655);
 
   // Secondaries & Accents
   static const Color secondary = Color(0xFF176B4B);
@@ -28,7 +29,7 @@ class AppColors {
   static const Color outlineVariant = Color(0xFFBFC8CD);
   static const Color error = Color(0xFFBA1A1A);
 
-  // Pastel Card Tones (Matching MediVault React Design)
+  // Pastel Card Tones (Matching MediVault Client Image 1)
   static const Color toneMintBg = Color(0xFFE8F7EE);
   static const Color toneMintText = Color(0xFF005236);
   static const Color toneMintBorder = Color(0xFFA4F3CA);
@@ -56,4 +57,17 @@ class AppColors {
   static const Color toneLilacBg = Color(0xFFF3E5F5);
   static const Color toneLilacText = Color(0xFF4A148C);
   static const Color toneLilacBorder = Color(0xFFE1BEE7);
+
+  // Ambient & Hero Gradients
+  static const LinearGradient headerGradient = LinearGradient(
+    colors: [Color(0xFFE3F8EE), Color(0xFFEDFAF3), Color(0xFFF8F9FF)],
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+  );
+
+  static const LinearGradient heroBannerGradient = LinearGradient(
+    colors: [Color(0xFF0B6D55), Color(0xFF129875), Color(0xFF1CB08B)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 }
