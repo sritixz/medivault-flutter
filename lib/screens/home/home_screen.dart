@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/models/other_models.dart';
 import '../../providers/app_state.dart';
 import '../widgets/common_widgets.dart';
 
@@ -306,6 +307,10 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 20),
+
+            // Block 4 & 5: Book Appointment & Find Doctors / Hospitals Near Me
+            _buildBookAppointmentAndNearbySection(context),
             const SizedBox(height: 20),
 
             // Daily Medicine Reminder Strip
@@ -1377,6 +1382,421 @@ class HomeScreen extends StatelessWidget {
                 fontSize: 11,
                 color: AppColors.onSurfaceVariant,
                 fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBookAppointmentAndNearbySection(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Section Header for Book Appointment
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF0284C7),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.calendar_month, color: Colors.white, size: 16),
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Book Appointment',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.onSurface,
+                ),
+              ),
+              const Spacer(),
+              TextButton.icon(
+                onPressed: () => onNavigateRoute('appointments'),
+                icon: const Text('All slots'),
+                label: const Icon(Icons.chevron_right, size: 16),
+                style: TextButton.styleFrom(
+                  foregroundColor: const Color(0xFF0284C7),
+                  padding: EdgeInsets.zero,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Horizontal Doctor specialties list
+          SizedBox(
+            height: 110,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                _buildDoctorQuickBook(
+                  context,
+                  name: 'Dr. Ananya Roy',
+                  specialty: 'General Physician',
+                  rating: '4.9 ★',
+                  nextSlot: 'Today 4:00 PM',
+                  color: const Color(0xFF0D9488),
+                  avatarInitial: 'AR',
+                ),
+                _buildDoctorQuickBook(
+                  context,
+                  name: 'Dr. Rajesh Verma',
+                  specialty: 'Cardiologist',
+                  rating: '4.8 ★',
+                  nextSlot: 'Tomorrow 11 AM',
+                  color: const Color(0xFF2563EB),
+                  avatarInitial: 'RV',
+                ),
+                _buildDoctorQuickBook(
+                  context,
+                  name: 'Dr. Sneha Patil',
+                  specialty: 'Pediatrician',
+                  rating: '4.9 ★',
+                  nextSlot: 'Today 5:30 PM',
+                  color: const Color(0xFFDB2777),
+                  avatarInitial: 'SP',
+                ),
+                _buildDoctorQuickBook(
+                  context,
+                  name: 'Dr. Meera Shah',
+                  specialty: 'Dentist',
+                  rating: '4.9 ★',
+                  nextSlot: 'Tomorrow 3 PM',
+                  color: const Color(0xFF7C3AED),
+                  avatarInitial: 'MS',
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Block 5: Find Doctors & Hospitals Near Me
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF059669),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.near_me, color: Colors.white, size: 16),
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Hospitals & Care Near Me',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.onSurface,
+                ),
+              ),
+              const Spacer(),
+              TextButton.icon(
+                onPressed: () => onNavigateTab(2), // Nearby tab
+                icon: const Text('Map view'),
+                label: const Icon(Icons.chevron_right, size: 16),
+                style: TextButton.styleFrom(
+                  foregroundColor: const Color(0xFF059669),
+                  padding: EdgeInsets.zero,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                _buildNearbyHospitalItem(
+                  name: 'Apollo Clinic',
+                  type: 'Multispecialty & Diagnostics',
+                  distance: '0.8 km',
+                  rating: '4.9',
+                  openStatus: 'Open till 9 PM',
+                  isEmergency: false,
+                  onTap: () => onNavigateTab(2),
+                ),
+                const Divider(height: 1, indent: 16, endIndent: 16),
+                _buildNearbyHospitalItem(
+                  name: 'Fortis Hospital',
+                  type: 'Super Specialty Hospital',
+                  distance: '2.4 km',
+                  rating: '4.8',
+                  openStatus: '24x7 Emergency',
+                  isEmergency: true,
+                  onTap: () => onNavigateTab(2),
+                ),
+                const Divider(height: 1, indent: 16, endIndent: 16),
+                _buildNearbyHospitalItem(
+                  name: 'Max Healthcare Centre',
+                  type: 'Advanced Care Hospital',
+                  distance: '3.1 km',
+                  rating: '4.7',
+                  openStatus: '24x7 Open',
+                  isEmergency: false,
+                  onTap: () => onNavigateTab(2),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDoctorQuickBook(
+    BuildContext context, {
+    required String name,
+    required String specialty,
+    required String rating,
+    required String nextSlot,
+    required Color color,
+    required String avatarInitial,
+  }) {
+    return Container(
+      width: 170,
+      margin: const EdgeInsets.only(right: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: () => _showQuickBookingModal(context, name, specialty),
+        borderRadius: BorderRadius.circular(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 16,
+                  backgroundColor: color.withValues(alpha: 0.15),
+                  child: Text(
+                    avatarInitial,
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: color),
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  rating,
+                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFFD97706)),
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  specialty,
+                  style: const TextStyle(fontSize: 10, color: AppColors.onSurfaceVariant),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Icon(Icons.schedule, size: 11, color: color),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    nextSlot,
+                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: color),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNearbyHospitalItem({
+    required String name,
+    required String type,
+    required String distance,
+    required String rating,
+    required String openStatus,
+    required bool isEmergency,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: isEmergency ? const Color(0xFFFEE2E2) : const Color(0xFFF0FDF4),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                isEmergency ? Icons.local_hospital : Icons.local_pharmacy_outlined,
+                color: isEmergency ? const Color(0xFFDC2626) : const Color(0xFF059669),
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        '★ $rating',
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFFD97706)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '$type · $openStatus',
+                    style: const TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF1F5F9),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    distance,
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF0F172A)),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Directions',
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.primary),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showQuickBookingModal(BuildContext context, String doctor, String specialty) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Book Consultation with $doctor',
+              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+            ),
+            Text(
+              '$specialty · In-person / Video Consult',
+              style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFE2E8F0)),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.calendar_today, size: 18, color: AppColors.primary),
+                  SizedBox(width: 10),
+                  Text('Earliest Slot: Today at 4:30 PM', style: TextStyle(fontWeight: FontWeight.w600)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  final newApt = AppointmentItem(
+                    id: DateTime.now().millisecondsSinceEpoch,
+                    title: 'Consultation with $doctor',
+                    provider: doctor,
+                    date: '2026-11-21',
+                    time: '16:30',
+                    memberId: state.selectedMemberId == 'all' ? 'vikram' : state.selectedMemberId,
+                  );
+                  state.addAppointment(newApt);
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Appointment confirmed with $doctor!')),
+                  );
+                },
+                child: const Text('Confirm Appointment'),
               ),
             ),
           ],
