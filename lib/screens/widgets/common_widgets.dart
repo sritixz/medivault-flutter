@@ -85,7 +85,7 @@ class StatusBadge extends StatelessWidget {
     final style = ToneStyle.getTone(tone);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: style.background,
         borderRadius: BorderRadius.circular(20),
@@ -95,16 +95,16 @@ class StatusBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 13, color: style.textColor),
-            const SizedBox(width: 4),
+            Icon(icon, size: 14, color: style.textColor),
+            const SizedBox(width: 5),
           ],
           Text(
             text,
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: FontWeight.w700,
               color: style.textColor,
-              letterSpacing: 0.3,
+              letterSpacing: 0.2,
             ),
           ),
         ],
@@ -128,41 +128,67 @@ class MemberPills extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
+      height: 44,
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
-          _buildPill('Everyone', 'all', selectedMemberId == 'all'),
+          _buildPill('Everyone', 'all', selectedMemberId == 'all', Icons.people),
           ...members.map(
-            (m) => _buildPill(m.shortName, m.id, selectedMemberId == m.id),
+            (m) => _buildPill(m.shortName, m.id, selectedMemberId == m.id, Icons.person),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildPill(String label, String id, bool isSelected) {
+  Widget _buildPill(String label, String id, bool isSelected, IconData icon) {
+    final isEveryone = id == 'all';
+    final activeBg = isEveryone ? AppColors.activePillTeal : AppColors.primary;
+
     return Padding(
       padding: const EdgeInsets.only(right: 8),
-      child: ChoiceChip(
-        label: Text(label),
-        selected: isSelected,
-        onSelected: (_) => onSelect(id),
-        backgroundColor: AppColors.surface,
-        selectedColor: AppColors.primary,
-        labelStyle: TextStyle(
-          color: isSelected ? Colors.white : AppColors.onSurface,
-          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-          fontSize: 13,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(
-            color: isSelected ? AppColors.primary : AppColors.surfaceVariant,
+      child: InkWell(
+        onTap: () => onSelect(id),
+        borderRadius: BorderRadius.circular(22),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? activeBg : Colors.white,
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(
+              color: isSelected ? activeBg : const Color(0xFFE2E8F0),
+              width: 1,
+            ),
+            boxShadow: [
+              if (!isSelected)
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: 16,
+                color: isSelected ? Colors.white : AppColors.onSurfaceVariant,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : AppColors.onSurface,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+            ],
           ),
         ),
-        showCheckmark: false,
       ),
     );
   }
