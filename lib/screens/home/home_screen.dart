@@ -19,250 +19,99 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeRecords = state.homeRecords;
+    final activeMemberName = state.activeMember?.name ?? 'Pooja';
 
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 70,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Row(
-          children: [
-            Image.asset(
-              'assets/images/app_logo.png',
-              width: 44,
-              height: 44,
-              fit: BoxFit.contain,
-              errorBuilder: (_, _, _) => Container(
-                width: 44,
-                height: 44,
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.family_restroom, color: Colors.white, size: 24),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    state.activeMember?.name ?? 'Vikram Sharma',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.onSurface,
-                      letterSpacing: -0.3,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  const Text(
-                    'Your family’s health companion',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: AppColors.onSurface, size: 24),
-            onPressed: () => onNavigateRoute('search'),
-          ),
-          Stack(
+      backgroundColor: const Color(0xFFF8FAFC),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                icon: const Icon(Icons.notifications_none, color: AppColors.onSurface, size: 26),
-                onPressed: () => onNavigateRoute('notifications'),
+              // Top Mockup Header (Doctor Avatar, Greeting, Slogan)
+              _buildTopMockupHeader(context, activeMemberName),
+              const SizedBox(height: 12),
+
+              // Member Selector Pills
+              MemberPills(
+                members: state.members,
+                selectedMemberId: state.selectedMemberId,
+                onSelect: state.setMember,
               ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFEF4444),
-                    shape: BoxShape.circle,
-                  ),
-                  constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-                  child: const Text(
-                    '1',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
+              const SizedBox(height: 12),
+
+              // Status Chips
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    StatusBadge(
+                      icon: Icons.people_outline,
+                      text: '${state.members.length} family profiles',
+                      tone: 'mint',
                     ),
-                    textAlign: TextAlign.center,
-                  ),
+                    const SizedBox(width: 8),
+                    StatusBadge(
+                      icon: Icons.folder_outlined,
+                      text: 'Health locker · ${homeRecords.length} records',
+                      tone: 'blue',
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-          const SizedBox(width: 8),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Member Selector Pills
-            MemberPills(
-              members: state.members,
-              selectedMemberId: state.selectedMemberId,
-              onSelect: state.setMember,
-            ),
-            const SizedBox(height: 12),
+              const SizedBox(height: 16),
 
-            // Status Chips
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  StatusBadge(
-                    icon: Icons.people_outline,
-                    text: '${state.members.length} family profiles',
-                    tone: 'mint',
-                  ),
-                  const SizedBox(width: 8),
-                  StatusBadge(
-                    icon: Icons.folder_outlined,
-                    text: 'Health locker · ${homeRecords.length} records',
-                    tone: 'blue',
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 14),
+              // SECTION 1: Primary 4 Feature Cards (Mockup Image Match)
+              _buildPrimary4CardsSection(context),
+              const SizedBox(height: 20),
 
-            // Hero Promo Banner (Offers & Discounts / Image 1 Match)
-            _buildHeroBanner(),
-            const SizedBox(height: 16),
+              // SECTION 2: Insurance & Financial Support (Mockup Image Match)
+              _buildInsuranceSupportSection(context),
+              const SizedBox(height: 20),
 
-            // Section Header matching Image 1
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
-                      color: AppColors.activePillTeal,
-                      shape: BoxShape.circle,
+              // SECTION 3: 5 Quick Info Mini-Cards (Mockup Image Match)
+              _buildQuickInfoMiniCardsSection(context),
+              const SizedBox(height: 22),
+
+              // SECTION 4: Health Records & Longitudinal Vitals (PDF Blocks 1-10)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: const BoxDecoration(
+                        color: AppColors.activePillTeal,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.monitor_heart, color: Colors.white, size: 16),
                     ),
-                    child: const Icon(Icons.monitor_heart, color: Colors.white, size: 16),
-                  ),
-                  const SizedBox(width: 8),
-                  const Text(
-                    'Essential Healthcare',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.onSurface,
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Records & Longitudinal Vitals',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.onSurface,
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  TextButton.icon(
-                    onPressed: () => onNavigateTab(3), // Account
-                    icon: const Text('All features'),
-                    label: const Icon(Icons.chevron_right, size: 16),
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppColors.primary,
-                      padding: EdgeInsets.zero,
+                    const Spacer(),
+                    TextButton.icon(
+                      onPressed: () => onNavigateTab(3), // Account / All
+                      icon: const Text('All features'),
+                      label: const Icon(Icons.chevron_right, size: 16),
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppColors.primary,
+                        padding: EdgeInsets.zero,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            // 6 Service Cards Grid (Matching Image 1 Visuals)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 1.20,
-                children: [
-                  _buildServiceCard(
-                    title: 'Find care',
-                    subtitle: 'Doctors & healthcare near you',
-                    badge: 'NEARBY',
-                    tone: 'mint',
-                    icon: Icons.location_on,
-                    imageAsset: 'assets/stitch/consult.png',
-                    fallbackAsset: 'assets/photos/doctor.jpg',
-                    onTap: () => onNavigateTab(2), // Nearby tab
-                  ),
-                  _buildServiceCard(
-                    title: 'Emergency',
-                    subtitle: 'Important details, within reach',
-                    badge: 'HEALTH ID',
-                    tone: 'peach',
-                    icon: Icons.health_and_safety_outlined,
-                    imageAsset: 'assets/stitch/emergency.png',
-                    fallbackAsset: null,
-                    onTap: () => onNavigateRoute('emergency'),
-                  ),
-                  _buildServiceCard(
-                    title: 'Family care',
-                    subtitle: 'Your family’s health, together',
-                    badge: null,
-                    tone: 'blue',
-                    icon: Icons.people_outline,
-                    imageAsset: 'assets/stitch/family.png',
-                    fallbackAsset: null,
-                    onTap: () => onNavigateRoute('family'),
-                  ),
-                  _buildServiceCard(
-                    title: 'Medicines',
-                    subtitle: 'Your regular medicines & reminders',
-                    badge: 'DAILY CARE',
-                    tone: 'cream',
-                    icon: Icons.medical_services_outlined,
-                    imageAsset: 'assets/stitch/medicines.png',
-                    fallbackAsset: null,
-                    onTap: () => onNavigateRoute('medicines'),
-                  ),
-                  _buildServiceCard(
-                    title: 'Easier',
-                    subtitle: 'Upload your prescription or report',
-                    badge: 'QUICK UPLOAD',
-                    tone: 'rose',
-                    icon: Icons.cloud_upload_outlined,
-                    imageAsset: 'assets/stitch/upload.png',
-                    fallbackAsset: null,
-                    onTap: () => onNavigateRoute('upload'),
-                  ),
-                  _buildServiceCard(
-                    title: 'Lab reports',
-                    subtitle: 'Your health test records',
-                    badge: 'HEALTH LOCKER',
-                    tone: 'aqua',
-                    icon: Icons.science_outlined,
-                    imageAsset: 'assets/stitch/labs.png',
-                    fallbackAsset: null,
-                    onTap: () {
-                      state.setCategory('Lab reports');
-                      onNavigateTab(1); // Records tab
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Block 1: 1-Tap Emergency SOS Bar
-            _buildEmergencySosBar(context),
+              // Block 1: 1-Tap Emergency SOS Bar
+              _buildEmergencySosBar(context),
             const SizedBox(height: 16),
 
             // Block 1: Longitudinal Health Record (BP & Sugar Consolidation)
@@ -383,187 +232,730 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
+    ),
+  );
+}
+
+  Widget _buildTopMockupHeader(BuildContext context, String activeMemberName) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFFE2F7F9), Color(0xFFF6FCFD), Color(0xFFF8FAFC)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Circular Doctor Avatar with soft glow border
+          Container(
+            width: 58,
+            height: 58,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2.5),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF0D9488).withValues(alpha: 0.15),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: ClipOval(
+              child: Image.asset(
+                'assets/v2_design/avatar_doctor.png',
+                fit: BoxFit.cover,
+                errorBuilder: (_, _, _) => const Icon(
+                  Icons.person,
+                  size: 32,
+                  color: AppColors.primary,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+
+          // Greeting & Subtitle
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Hello,',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF475569),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        activeMemberName,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                          color: Color(0xFF0F172A),
+                          letterSpacing: -0.4,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Text(
+                      '♡',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF0D9488),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                const Text(
+                  'Your health records, doctors and support - all in one place.',
+                  style: TextStyle(
+                    fontSize: 11,
+                    height: 1.25,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF64748B),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Right side Slogan illustration + action icons
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.search, color: Color(0xFF334155), size: 22),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () => onNavigateRoute('search'),
+                  ),
+                  const SizedBox(width: 10),
+                  Stack(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.notifications_none, color: Color(0xFF334155), size: 24),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        onPressed: () => onNavigateRoute('notifications'),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(3),
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFEF4444),
+                            shape: BoxShape.circle,
+                          ),
+                          constraints: const BoxConstraints(minWidth: 14, minHeight: 14),
+                          child: const Text(
+                            '1',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Image.asset(
+                'assets/v2_design/header_slogan.png',
+                width: 105,
+                height: 52,
+                fit: BoxFit.contain,
+                errorBuilder: (_, _, _) => const SizedBox(),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildServiceCard({
-    required String title,
-    required String subtitle,
-    required String? badge,
-    required String tone,
-    required IconData icon,
+  Widget _buildPrimary4CardsSection(BuildContext context) {
+    return SizedBox(
+      height: 195,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children: [
+          _buildMockupCard(
+            imageAsset: 'assets/v2_design/card_records_full.png',
+            width: 155,
+            onTap: () => onNavigateTab(2), // Records Locker tab
+          ),
+          _buildMockupCard(
+            imageAsset: 'assets/v2_design/card_appointment_full.png',
+            width: 155,
+            onTap: () => onNavigateRoute('appointments'),
+          ),
+          _buildMockupCard(
+            imageAsset: 'assets/v2_design/card_nearby_full.png',
+            width: 155,
+            onTap: () => onNavigateTab(1), // Nearby / Find care tab
+          ),
+          _buildMockupCard(
+            imageAsset: 'assets/v2_design/card_offers_full.png',
+            width: 155,
+            onTap: () => onNavigateRoute('plans'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInsuranceSupportSection(BuildContext context) {
+    return Column(
+      children: [
+        Center(
+          child: Image.asset(
+            'assets/v2_design/badge_insurance.png',
+            height: 30,
+            fit: BoxFit.contain,
+            errorBuilder: (_, _, _) => Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
+                ),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.shield_outlined, color: Colors.white, size: 16),
+                  SizedBox(width: 6),
+                  Text(
+                    'Insurance & Financial Support',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 250,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            children: [
+              _buildMockupCard(
+                imageAsset: 'assets/v2_design/card_mediclaim_full.png',
+                width: 195,
+                onTap: () => onNavigateRoute('insurance'),
+              ),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Row(
+                    children: [
+                      _buildMockupCard(
+                        imageAsset: 'assets/v2_design/card_fund_full.png',
+                        width: 195,
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('MediVault Health Fund is coming soon! Pre-registration open.'),
+                              backgroundColor: Color(0xFF0D9488),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildMockupCard(
+                        imageAsset: 'assets/v2_design/card_loan_full.png',
+                        width: 195,
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Instant Medical Loan is coming soon in partnership with top lenders.'),
+                              backgroundColor: Color(0xFFEF4444),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    top: 65,
+                    child: IgnorePointer(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.15),
+                              blurRadius: 16,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: Image.asset(
+                          'assets/v2_design/badge_coming_soon.png',
+                          width: 320,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQuickInfoMiniCardsSection(BuildContext context) {
+    return SizedBox(
+      height: 145,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children: [
+          _buildMiniCardItem(
+            imageAsset: 'assets/v2_design/mini_emergency.png',
+            onTap: () => onNavigateRoute('emergency'),
+          ),
+          _buildMiniCardItem(
+            imageAsset: 'assets/v2_design/mini_blood.png',
+            onTap: () => _showBloodGroupSheet(context),
+          ),
+          _buildMiniCardItem(
+            imageAsset: 'assets/v2_design/mini_conditions.png',
+            onTap: () => _showMedicalConditionsSheet(context),
+          ),
+          _buildMiniCardItem(
+            imageAsset: 'assets/v2_design/mini_allergies.png',
+            onTap: () => _showAllergiesSheet(context),
+          ),
+          _buildMiniCardItem(
+            imageAsset: 'assets/v2_design/mini_more.png',
+            onTap: () => onNavigateTab(3), // Account / More tab
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMiniCardItem({
     required String imageAsset,
-    String? fallbackAsset,
     required VoidCallback onTap,
   }) {
-    final style = ToneStyle.getTone(tone);
-
-    LinearGradient cardGradient;
-    switch (tone.toLowerCase()) {
-      case 'mint':
-        cardGradient = const LinearGradient(
-          colors: [Color(0xFFEEFFF2), Color(0xFFD7F4DE)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        );
-        break;
-      case 'peach':
-        cardGradient = const LinearGradient(
-          colors: [Color(0xFFFFF1EA), Color(0xFFFCE1D0)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        );
-        break;
-      case 'blue':
-        cardGradient = const LinearGradient(
-          colors: [Color(0xFFEAF6FF), Color(0xFFD6EDFB)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        );
-        break;
-      case 'cream':
-        cardGradient = const LinearGradient(
-          colors: [Color(0xFFFBF8E6), Color(0xFFF6E8BF)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        );
-        break;
-      case 'rose':
-        cardGradient = const LinearGradient(
-          colors: [Color(0xFFFFF0F4), Color(0xFFFCE0E6)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        );
-        break;
-      case 'aqua':
-      default:
-        cardGradient = const LinearGradient(
-          colors: [Color(0xFFF0FAFE), Color(0xFFD5F2F7)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        );
-        break;
-    }
-
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
       child: Container(
+        width: 118,
+        margin: const EdgeInsets.only(right: 10),
         decoration: BoxDecoration(
-          gradient: cardGradient,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: style.borderColor.withValues(alpha: 0.6), width: 1),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: style.borderColor.withValues(alpha: 0.22),
-              blurRadius: 6,
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 8,
               offset: const Offset(0, 3),
             ),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Stack(
+          borderRadius: BorderRadius.circular(16),
+          child: Image.asset(
+            imageAsset,
+            fit: BoxFit.fill,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMockupCard({
+    required String imageAsset,
+    required VoidCallback onTap,
+    required double width,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        margin: const EdgeInsets.only(right: 12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.07),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(18),
+          child: Image.asset(
+            imageAsset,
+            fit: BoxFit.fill,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showBloodGroupSheet(BuildContext context) {
+    final activeMember = state.activeMember;
+    final bloodGroup = activeMember?.id == 'vikram' ? 'O+' : 'B+';
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return Container(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Clean circular badge with transparent standalone Stitch illustration
-              Positioned(
-                bottom: 6,
-                right: 6,
-                child: Container(
-                  width: 72,
-                  height: 72,
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.72),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: style.borderColor.withValues(alpha: 0.20),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFEBEE),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Icon(Icons.bloodtype, color: Color(0xFFE53935), size: 30),
+                  ),
+                  const SizedBox(width: 14),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${activeMember?.name ?? "Pooja"}\'s Blood Group',
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                      ),
+                      const Text(
+                        'Emergency Quick ID Card',
+                        style: TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant),
                       ),
                     ],
                   ),
-                  child: Image.asset(
-                    imageAsset,
-                    fit: BoxFit.contain,
-                    errorBuilder: (_, _, _) => fallbackAsset != null
-                        ? Image.asset(
-                            fallbackAsset,
-                            fit: BoxFit.contain,
-                            errorBuilder: (_, _, _) => const SizedBox(),
-                          )
-                        : const SizedBox(),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE53935),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      bloodGroup,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-
-              // Foreground card copy on the left
-              Padding(
-                padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: Text(
-                            title,
-                            style: TextStyle(
-                              fontSize: 14.5,
-                              fontWeight: FontWeight.w800,
-                              color: style.textColor,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Icon(icon, size: 18, color: style.textColor),
+                        const Text('Rh Factor:', style: TextStyle(fontWeight: FontWeight.w600)),
+                        Text('Positive (Rh+)', style: TextStyle(color: Colors.grey.shade800, fontWeight: FontWeight.w700)),
                       ],
                     ),
-                    const SizedBox(height: 4),
-                    if (badge != null)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
-                        decoration: BoxDecoration(
-                          color: style.textColor.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          badge,
-                          style: TextStyle(
-                            fontSize: 8.5,
-                            fontWeight: FontWeight.w800,
-                            color: style.textColor,
-                            letterSpacing: 0.4,
+                    const Divider(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Can Receive From:', style: TextStyle(fontWeight: FontWeight.w600)),
+                        Text(bloodGroup == 'O+' ? 'O+, O-' : 'B+, B-, O+, O-', style: const TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF0D9488))),
+                      ],
+                    ),
+                    const Divider(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Emergency Blood Helpline:', style: TextStyle(fontWeight: FontWeight.w600)),
+                        const Text('104 / 1910', style: TextStyle(fontWeight: FontWeight.w800, color: Color(0xFFE53935))),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    onNavigateRoute('emergency');
+                  },
+                  icon: const Icon(Icons.share, size: 18),
+                  label: const Text('Share Emergency Medical ID'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFE53935),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showMedicalConditionsSheet(BuildContext context) {
+    final activeMember = state.activeMember;
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return Container(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE0F2FE),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Icon(Icons.assignment, color: Color(0xFF0284C7), size: 28),
+                  ),
+                  const SizedBox(width: 14),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${activeMember?.name ?? "Pooja"}\'s Conditions',
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                      ),
+                      const Text(
+                        'Active medical tags & history',
+                        style: TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              const ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(Icons.check_circle, color: Color(0xFF10B981)),
+                title: Text('Hypertension (Mild)', style: TextStyle(fontWeight: FontWeight.w700)),
+                subtitle: Text('Under control with Telmisartan 40mg • Doctor reviewed'),
+              ),
+              const Divider(),
+              const ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(Icons.check_circle, color: Color(0xFF10B981)),
+                title: Text('Seasonal Bronchial Sensitivity', style: TextStyle(fontWeight: FontWeight.w700)),
+                subtitle: Text('Monitored during winter • Inhaler on record'),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      child: const Text('Close'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        onNavigateTab(2); // Records
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF0284C7),
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('View All Records'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showAllergiesSheet(BuildContext context) {
+    final activeMember = state.activeMember;
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return Container(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF7ED),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Icon(Icons.warning_amber_rounded, color: Color(0xFFEA580C), size: 28),
+                  ),
+                  const SizedBox(width: 14),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${activeMember?.name ?? "Pooja"}\'s Allergies',
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                      ),
+                      const Text(
+                        'Critical warnings for prescribing doctors',
+                        style: TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFEF2F2),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFFCA5A5)),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.block, color: Color(0xFFDC2626), size: 22),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Penicillin & Amoxicillin',
+                            style: TextStyle(fontWeight: FontWeight.w800, color: Color(0xFFDC2626), fontSize: 14),
                           ),
-                        ),
-                      )
-                    else
-                      const SizedBox(height: 16),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 66),
-                      child: Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.w500,
-                          color: style.textColor.withValues(alpha: 0.85),
-                          height: 1.25,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                          Text(
+                            'Severity: High (Causes urticaria/rash)',
+                            style: TextStyle(color: Color(0xFF7F1D1D), fontSize: 12),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFFBEB),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFFCD34D)),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.warning_outlined, color: Color(0xFFD97706), size: 22),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Peanuts & Tree Nuts',
+                            style: TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF92400E), fontSize: 14),
+                          ),
+                          Text(
+                            'Severity: Moderate (Gastric irritation)',
+                            style: TextStyle(color: Color(0xFF78350F), fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    onNavigateRoute('emergency');
+                  },
+                  icon: const Icon(Icons.health_and_safety, size: 18),
+                  label: const Text('Update In Emergency Medical ID'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFEA580C),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+              ),
             ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -635,77 +1027,6 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(width: 4),
                 const Icon(Icons.arrow_forward, size: 12, color: AppColors.primary),
               ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeroBanner() {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      height: 116,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF0F7657), Color(0xFF0B5D45), Color(0xFF074533)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF0B6D55).withValues(alpha: 0.28),
-            blurRadius: 14,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              bottom: 0,
-              right: 0,
-              width: 150,
-              child: Image.asset(
-                'assets/images/hero_stethoscope_feathered.png',
-                fit: BoxFit.cover,
-                alignment: Alignment.centerRight,
-                errorBuilder: (_, _, _) => const SizedBox(),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(18, 14, 140, 14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Your Health.\nOur Priority.',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 19,
-                      fontWeight: FontWeight.w900,
-                      height: 1.15,
-                      letterSpacing: -0.3,
-                    ),
-                  ),
-                  SizedBox(height: 6),
-                  Text(
-                    'Stay Healthy • Live Better',
-                    style: TextStyle(
-                      color: Color(0xFFC7F3DB),
-                      fontSize: 12,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
             ),
           ],
         ),

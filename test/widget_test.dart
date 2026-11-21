@@ -4,6 +4,7 @@ import 'package:medivault_mobile/main.dart';
 void main() {
   testWidgets('MediVaultApp initial smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(const MediVaultApp());
-    expect(find.text('Essential Healthcare'), findsOneWidget);
+    expect(find.text('Hello,'), findsOneWidget);
+    expect(find.text('Records & Longitudinal Vitals'), findsOneWidget);
   });
 }
