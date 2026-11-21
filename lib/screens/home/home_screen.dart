@@ -191,7 +191,7 @@ class HomeScreen extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
-                childAspectRatio: 1.45,
+                childAspectRatio: 1.20,
                 children: [
                   _buildServiceCard(
                     title: 'Find care',
@@ -199,7 +199,7 @@ class HomeScreen extends StatelessWidget {
                     badge: 'NEARBY',
                     tone: 'mint',
                     icon: Icons.location_on,
-                    imageAsset: 'assets/images/art_find_care.png',
+                    imageAsset: 'assets/stitch/consult.png',
                     fallbackAsset: 'assets/photos/doctor.jpg',
                     onTap: () => onNavigateTab(2), // Nearby tab
                   ),
@@ -209,8 +209,8 @@ class HomeScreen extends StatelessWidget {
                     badge: 'HEALTH ID',
                     tone: 'peach',
                     icon: Icons.health_and_safety_outlined,
-                    imageAsset: 'assets/images/art_emergency.png',
-                    fallbackAsset: 'assets/stitch/emergency.png',
+                    imageAsset: 'assets/stitch/emergency.png',
+                    fallbackAsset: null,
                     onTap: () => onNavigateRoute('emergency'),
                   ),
                   _buildServiceCard(
@@ -219,8 +219,8 @@ class HomeScreen extends StatelessWidget {
                     badge: null,
                     tone: 'blue',
                     icon: Icons.people_outline,
-                    imageAsset: 'assets/images/art_family.png',
-                    fallbackAsset: 'assets/stitch/family.png',
+                    imageAsset: 'assets/stitch/family.png',
+                    fallbackAsset: null,
                     onTap: () => onNavigateRoute('family'),
                   ),
                   _buildServiceCard(
@@ -229,8 +229,8 @@ class HomeScreen extends StatelessWidget {
                     badge: 'DAILY CARE',
                     tone: 'cream',
                     icon: Icons.medical_services_outlined,
-                    imageAsset: 'assets/images/art_medicines.png',
-                    fallbackAsset: 'assets/stitch/medicines.png',
+                    imageAsset: 'assets/stitch/medicines.png',
+                    fallbackAsset: null,
                     onTap: () => onNavigateRoute('medicines'),
                   ),
                   _buildServiceCard(
@@ -239,8 +239,8 @@ class HomeScreen extends StatelessWidget {
                     badge: 'QUICK UPLOAD',
                     tone: 'rose',
                     icon: Icons.cloud_upload_outlined,
-                    imageAsset: 'assets/images/art_easier.png',
-                    fallbackAsset: 'assets/stitch/upload.png',
+                    imageAsset: 'assets/stitch/upload.png',
+                    fallbackAsset: null,
                     onTap: () => onNavigateRoute('upload'),
                   ),
                   _buildServiceCard(
@@ -249,8 +249,8 @@ class HomeScreen extends StatelessWidget {
                     badge: 'HEALTH LOCKER',
                     tone: 'aqua',
                     icon: Icons.science_outlined,
-                    imageAsset: 'assets/images/art_lab.png',
-                    fallbackAsset: 'assets/stitch/labs.png',
+                    imageAsset: 'assets/stitch/labs.png',
+                    fallbackAsset: null,
                     onTap: () {
                       state.setCategory('Lab reports');
                       onNavigateTab(1); // Records tab
@@ -465,46 +465,67 @@ class HomeScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           child: Stack(
             children: [
-              // Negative top/bottom trims the neighboring-card bleed baked into the PNGs
+              // Clean circular badge with transparent standalone Stitch illustration
               Positioned(
-                top: -12,
-                bottom: -12,
-                right: 0,
-                width: 90,
-                child: Image.asset(
-                  imageAsset,
-                  fit: BoxFit.cover,
-                  alignment: Alignment.centerRight,
-                  errorBuilder: (_, _, _) => fallbackAsset != null
-                      ? Image.asset(
-                          fallbackAsset,
-                          fit: BoxFit.contain,
-                          errorBuilder: (_, _, _) => const SizedBox(),
-                        )
-                      : const SizedBox(),
+                bottom: 6,
+                right: 6,
+                child: Container(
+                  width: 72,
+                  height: 72,
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.72),
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: style.borderColor.withValues(alpha: 0.20),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Image.asset(
+                    imageAsset,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, _, _) => fallbackAsset != null
+                        ? Image.asset(
+                            fallbackAsset,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, _, _) => const SizedBox(),
+                          )
+                        : const SizedBox(),
+                  ),
                 ),
               ),
 
               // Foreground card copy on the left
               Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: style.textColor,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: TextStyle(
+                              fontSize: 14.5,
+                              fontWeight: FontWeight.w800,
+                              color: style.textColor,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Icon(icon, size: 18, color: style.textColor),
+                      ],
                     ),
                     const SizedBox(height: 4),
                     if (badge != null)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
                         decoration: BoxDecoration(
                           color: style.textColor.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(6),
@@ -518,10 +539,12 @@ class HomeScreen extends StatelessWidget {
                             letterSpacing: 0.4,
                           ),
                         ),
-                      ),
+                      )
+                    else
+                      const SizedBox(height: 16),
                     const Spacer(),
                     Padding(
-                      padding: const EdgeInsets.only(right: 76),
+                      padding: const EdgeInsets.only(right: 66),
                       child: Text(
                         subtitle,
                         style: TextStyle(
