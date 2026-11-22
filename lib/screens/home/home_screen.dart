@@ -396,29 +396,49 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildPrimary4CardsSection(BuildContext context) {
     return SizedBox(
-      height: 195,
+      height: 200,
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
-          _buildMockupCard(
-            imageAsset: 'assets/v2_design/card_records_full.png',
-            width: 155,
+          _buildNativeServiceCard(
+            title: 'My Medical Records',
+            subtitle: 'Store & access your health records anytime, anywhere.',
+            iconAsset: 'assets/v2_design/icon_3d_records.png',
+            gradientColors: const [Color(0xFF28B7D6), Color(0xFF0C8FC0)],
+            titleColor: Colors.white,
+            subtitleColor: const Color(0xFFE0F7FA),
+            buttonColor: const Color(0xFF056A8F),
             onTap: () => onNavigateTab(2), // Records Locker tab
           ),
-          _buildMockupCard(
-            imageAsset: 'assets/v2_design/card_appointment_full.png',
-            width: 155,
+          _buildNativeServiceCard(
+            title: 'Book Appointment',
+            subtitle: 'Consult with your doctor, at your convenience.',
+            iconAsset: 'assets/v2_design/icon_3d_appointment.png',
+            gradientColors: const [Color(0xFFD6CEF9), Color(0xFFC7D3FE)],
+            titleColor: const Color(0xFF1E293B),
+            subtitleColor: const Color(0xFF475569),
+            buttonColor: const Color(0xFF7C3AED),
             onTap: () => onNavigateRoute('appointments'),
           ),
-          _buildMockupCard(
-            imageAsset: 'assets/v2_design/card_nearby_full.png',
-            width: 155,
+          _buildNativeServiceCard(
+            title: 'Find Doctors,\nHospitals & Medical Stores',
+            subtitle: 'Locate nearby doctors, hospitals and pharmacies.',
+            iconAsset: 'assets/v2_design/icon_3d_nearby.png',
+            gradientColors: const [Color(0xFFFEF08A), Color(0xFFFDE047)],
+            titleColor: const Color(0xFF78350F),
+            subtitleColor: const Color(0xFF92400E),
+            buttonColor: const Color(0xFFD97706),
             onTap: () => onNavigateTab(1), // Nearby / Find care tab
           ),
-          _buildMockupCard(
-            imageAsset: 'assets/v2_design/card_offers_full.png',
-            width: 155,
+          _buildNativeServiceCard(
+            title: 'Offers & Discounts',
+            subtitle: 'Exclusive health & wellness offers.',
+            iconAsset: 'assets/v2_design/icon_3d_offers.png',
+            gradientColors: const [Color(0xFFFCE7F3), Color(0xFFFBCFE8)],
+            titleColor: const Color(0xFF831843),
+            subtitleColor: const Color(0xFF9D174D),
+            buttonColor: const Color(0xFFBE185D),
             onTap: () => onNavigateRoute('plans'),
           ),
         ],
@@ -430,46 +450,53 @@ class HomeScreen extends StatelessWidget {
     return Column(
       children: [
         Center(
-          child: Image.asset(
-            'assets/v2_design/badge_insurance.png',
-            height: 30,
-            fit: BoxFit.contain,
-            errorBuilder: (_, _, _) => Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
+              ),
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF2563EB).withValues(alpha: 0.25),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
                 ),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.shield_outlined, color: Colors.white, size: 16),
-                  SizedBox(width: 6),
-                  Text(
-                    'Insurance & Financial Support',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 12,
-                    ),
+              ],
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.shield_outlined, color: Colors.white, size: 16),
+                SizedBox(width: 6),
+                Text(
+                  'Insurance & Financial Support',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 12.5,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
         const SizedBox(height: 12),
         SizedBox(
-          height: 250,
+          height: 245,
           child: ListView(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             children: [
-              _buildMockupCard(
-                imageAsset: 'assets/v2_design/card_mediclaim_full.png',
-                width: 195,
+              _buildNativeInsuranceCard(
+                title: 'Mediclaim Policy',
+                subtitle: 'Protect your health with the right policy.',
+                iconAsset: 'assets/v2_design/icon_3d_mediclaim.png',
+                gradientColors: const [Color(0xFFE0F2FE), Color(0xFFBAE6FD)],
+                titleColor: const Color(0xFF0369A1),
+                subtitleColor: const Color(0xFF075985),
+                buttonColor: const Color(0xFF0284C7),
                 onTap: () => onNavigateRoute('insurance'),
               ),
               Stack(
@@ -477,9 +504,14 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      _buildMockupCard(
-                        imageAsset: 'assets/v2_design/card_fund_full.png',
-                        width: 195,
+                      _buildNativeInsuranceCard(
+                        title: 'Health Fund',
+                        subtitle: 'Build your health savings for a secure tomorrow.',
+                        iconAsset: 'assets/v2_design/icon_3d_fund.png',
+                        gradientColors: const [Color(0xFFDCFCE7), Color(0xFFBBF7D0)],
+                        titleColor: const Color(0xFF15803D),
+                        subtitleColor: const Color(0xFF166534),
+                        buttonColor: const Color(0xFF16A34A),
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -489,9 +521,14 @@ class HomeScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      _buildMockupCard(
-                        imageAsset: 'assets/v2_design/card_loan_full.png',
-                        width: 195,
+                      _buildNativeInsuranceCard(
+                        title: 'Emergency Medical Loan',
+                        subtitle: 'Get quick financial support when you need it most.',
+                        iconAsset: 'assets/v2_design/icon_3d_loan.png',
+                        gradientColors: const [Color(0xFFFFE4E6), Color(0xFFFECDD3)],
+                        titleColor: const Color(0xFFBE123C),
+                        subtitleColor: const Color(0xFF9F1239),
+                        buttonColor: const Color(0xFFE11D48),
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -504,23 +541,31 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                   Positioned(
-                    top: 65,
+                    top: 60,
                     child: IgnorePointer(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
                         decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.15),
-                              blurRadius: 16,
+                              color: Colors.black.withValues(alpha: 0.14),
+                              blurRadius: 18,
                               offset: const Offset(0, 6),
                             ),
                           ],
+                          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
                         ),
-                        child: Image.asset(
-                          'assets/v2_design/badge_coming_soon.png',
-                          width: 320,
-                          fit: BoxFit.contain,
+                        child: const Text(
+                          'coming soon',
+                          style: TextStyle(
+                            fontFamily: 'monospace',
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900,
+                            color: Color(0xFF2563EB),
+                            letterSpacing: 2.0,
+                          ),
                         ),
                       ),
                     ),
@@ -541,24 +586,34 @@ class HomeScreen extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
-          _buildMiniCardItem(
-            imageAsset: 'assets/v2_design/mini_emergency.png',
+          _buildNativeMiniCard(
+            title: 'Emergency',
+            subtitle: 'One tap. Help is on the way.',
+            iconAsset: 'assets/v2_design/mini_emergency.png',
             onTap: () => onNavigateRoute('emergency'),
           ),
-          _buildMiniCardItem(
-            imageAsset: 'assets/v2_design/mini_blood.png',
+          _buildNativeMiniCard(
+            title: 'Blood Group',
+            subtitle: 'Quick access to your blood group.',
+            iconAsset: 'assets/v2_design/mini_blood.png',
             onTap: () => _showBloodGroupSheet(context),
           ),
-          _buildMiniCardItem(
-            imageAsset: 'assets/v2_design/mini_conditions.png',
+          _buildNativeMiniCard(
+            title: 'Medical Conditions',
+            subtitle: 'Keep your conditions updated.',
+            iconAsset: 'assets/v2_design/mini_conditions.png',
             onTap: () => _showMedicalConditionsSheet(context),
           ),
-          _buildMiniCardItem(
-            imageAsset: 'assets/v2_design/mini_allergies.png',
+          _buildNativeMiniCard(
+            title: 'Allergies',
+            subtitle: 'Know what to avoid.',
+            iconAsset: 'assets/v2_design/mini_allergies.png',
             onTap: () => _showAllergiesSheet(context),
           ),
-          _buildMiniCardItem(
-            imageAsset: 'assets/v2_design/mini_more.png',
+          _buildNativeMiniCard(
+            title: 'More',
+            subtitle: 'Additional health information.',
+            iconAsset: 'assets/v2_design/mini_more.png',
             onTap: () => onNavigateTab(3), // Account / More tab
           ),
         ],
@@ -566,61 +621,284 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMiniCardItem({
-    required String imageAsset,
+  Widget _buildNativeMiniCard({
+    required String title,
+    required String subtitle,
+    required String iconAsset,
     required VoidCallback onTap,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 118,
+        width: 122,
+        height: 145,
         margin: const EdgeInsets.only(right: 10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFE2E8F0)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 8,
               offset: const Offset(0, 3),
             ),
           ],
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Image.asset(
-            imageAsset,
-            fit: BoxFit.fill,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              iconAsset,
+              height: 46,
+              fit: BoxFit.contain,
+              errorBuilder: (_, _, _) => const Icon(Icons.circle, size: 36),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF0F172A),
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 2),
+            Expanded(
+              child: Text(
+                subtitle,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 8.5,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF64748B),
+                  height: 1.15,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const Icon(
+              Icons.chevron_right,
+              size: 14,
+              color: Color(0xFF0D9488),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNativeServiceCard({
+    required String title,
+    required String subtitle,
+    required String iconAsset,
+    required List<Color> gradientColors,
+    required Color titleColor,
+    required Color subtitleColor,
+    required Color buttonColor,
+    required VoidCallback onTap,
+    double width = 160,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        height: 200,
+        margin: const EdgeInsets.only(right: 12),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: gradientColors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: gradientColors.last.withValues(alpha: 0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // High-Res 3D Icon
+              Center(
+                child: Image.asset(
+                  iconAsset,
+                  height: 72,
+                  fit: BoxFit.contain,
+                  errorBuilder: (_, _, _) => const Icon(Icons.medical_services, size: 50, color: Colors.white),
+                ),
+              ),
+              const SizedBox(height: 8),
+              // Title
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w900,
+                  color: titleColor,
+                  height: 1.15,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 4),
+              // Subtitle
+              Expanded(
+                child: Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 9.5,
+                    fontWeight: FontWeight.w500,
+                    color: subtitleColor,
+                    height: 1.2,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              // Bottom Right Arrow
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: buttonColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.chevron_right,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildMockupCard({
-    required String imageAsset,
+  Widget _buildNativeInsuranceCard({
+    required String title,
+    required String subtitle,
+    required String iconAsset,
+    required List<Color> gradientColors,
+    required Color titleColor,
+    required Color subtitleColor,
+    required Color buttonColor,
     required VoidCallback onTap,
-    required double width,
+    double width = 195,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: width,
+        height: 240,
         margin: const EdgeInsets.only(right: 12),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
+          gradient: LinearGradient(
+            colors: gradientColors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: gradientColors.last.withValues(alpha: 0.5), width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.07),
+              color: gradientColors.last.withValues(alpha: 0.2),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
           ],
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(18),
-          child: Image.asset(
-            imageAsset,
-            fit: BoxFit.fill,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // High-Res 3D Icon
+              Image.asset(
+                iconAsset,
+                height: 80,
+                fit: BoxFit.contain,
+                errorBuilder: (_, _, _) => const Icon(Icons.health_and_safety, size: 60),
+              ),
+              const SizedBox(height: 8),
+              // Title
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14.5,
+                  fontWeight: FontWeight.w900,
+                  color: titleColor,
+                  height: 1.15,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 4),
+              // Subtitle
+              Text(
+                subtitle,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                  color: subtitleColor,
+                  height: 1.25,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const Spacer(),
+              // View Details Button
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: buttonColor,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: buttonColor.withValues(alpha: 0.35),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'View Details',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 11,
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Icon(Icons.arrow_forward, color: Colors.white, size: 12),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
