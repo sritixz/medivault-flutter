@@ -19,18 +19,68 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeRecords = state.homeRecords;
-    final activeMemberName = state.activeMember?.name ?? 'Pooja';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top Mockup Header (Doctor Avatar, Greeting, Slogan)
-              _buildTopMockupHeader(context, activeMemberName),
-              const SizedBox(height: 12),
+              // Top Bar (Vikram Sharma, Logo, Search, Notifications)
+              _buildTopMockupHeader(context),
+
+              // 1-Tap Emergency SOS Card (Pink gradient, 3D emblem, 24x7 pill, SOS button)
+              _buildTopEmergencySosCard(context),
+              const SizedBox(height: 8),
+
+              // Essential Healthcare Section Header
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF0F766E),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.monitor_heart, color: Colors.white, size: 16),
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Essential Healthcare',
+                      style: TextStyle(
+                        fontSize: 18.5,
+                        fontWeight: FontWeight.w900,
+                        color: Color(0xFF0F172A),
+                        letterSpacing: -0.3,
+                      ),
+                    ),
+                    const Spacer(),
+                    TextButton.icon(
+                      onPressed: () => onNavigateTab(3), // Account / All features
+                      icon: const Text(
+                        'All features',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF0F766E),
+                        ),
+                      ),
+                      label: const Icon(Icons.chevron_right, size: 16, color: Color(0xFF0F766E)),
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              // 6 Healthcare Cards in Bento Grid (Exact layout from uploaded image)
+              _buildBentoGridSection(context),
+              const SizedBox(height: 22),
 
               // Member Selector Pills
               MemberPills(
@@ -59,1181 +109,564 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
-
-              // SECTION 1: Primary 4 Feature Cards (Mockup Image Match)
-              _buildPrimary4CardsSection(context),
               const SizedBox(height: 20),
 
-              // SECTION 2: Insurance & Financial Support (Mockup Image Match)
-              _buildInsuranceSupportSection(context),
+              // Block 1: Longitudinal Health Record (BP & Sugar Consolidation)
+              _buildLongitudinalHealthRecord(context),
               const SizedBox(height: 20),
 
-              // SECTION 3: 5 Quick Info Mini-Cards (Mockup Image Match)
-              _buildQuickInfoMiniCardsSection(context),
-              const SizedBox(height: 22),
+              // Block 2 & 3: Health Records & Locker (My, Family, Dental & Lab Records)
+              _buildHealthRecordsLockerSection(context),
+              const SizedBox(height: 20),
 
-              // SECTION 4: Health Records & Longitudinal Vitals (PDF Blocks 1-10)
+              // Utility Cards: Timeline & Appointments
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: const BoxDecoration(
-                        color: AppColors.activePillTeal,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.monitor_heart, color: Colors.white, size: 16),
-                    ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      'Records & Longitudinal Vitals',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.onSurface,
+                    Expanded(
+                      child: _buildUtilityCard(
+                        label: 'Health history',
+                        title: 'Your health,\nover time.',
+                        subtitle: '${homeRecords.length} records in timeline',
+                        buttonText: 'View timeline',
+                        tone: 'peach',
+                        icon: Icons.timeline,
+                        onTap: () => onNavigateRoute('timeline'),
                       ),
                     ),
-                    const Spacer(),
-                    TextButton.icon(
-                      onPressed: () => onNavigateTab(3), // Account / All
-                      icon: const Text('All features'),
-                      label: const Icon(Icons.chevron_right, size: 16),
-                      style: TextButton.styleFrom(
-                        foregroundColor: AppColors.primary,
-                        padding: EdgeInsets.zero,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildUtilityCard(
+                        label: 'UPCOMING CARE',
+                        title: 'Appointments\n& health events',
+                        subtitle: '${state.appointments.length} upcoming',
+                        buttonText: 'View calendar',
+                        tone: 'blue',
+                        icon: Icons.calendar_month_outlined,
+                        onTap: () => onNavigateRoute('appointments'),
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
 
-              // Block 1: 1-Tap Emergency SOS Bar
-              _buildEmergencySosBar(context),
-            const SizedBox(height: 16),
+              // Block 4 & 5: Book Appointment & Find Doctors / Hospitals Near Me
+              _buildBookAppointmentAndNearbySection(context),
+              const SizedBox(height: 20),
 
-            // Block 1: Longitudinal Health Record (BP & Sugar Consolidation)
-            _buildLongitudinalHealthRecord(context),
-            const SizedBox(height: 20),
+              // Block 7: Regular Medicines & Order Medicine Online
+              _buildRegularMedicinesSection(context),
+              const SizedBox(height: 20),
 
-            // Block 2 & 3: Health Records & Locker (My, Family, Dental & Lab Records)
-            _buildHealthRecordsLockerSection(context),
-            const SizedBox(height: 20),
+              // Block 6: Healthcare Offers & Preventive Discounts
+              _buildHealthOffersSection(context),
+              const SizedBox(height: 20),
 
-            // Utility Cards: Timeline & Appointments
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _buildUtilityCard(
-                      label: 'Health history',
-                      title: 'Your health,\nover time.',
-                      subtitle: '${homeRecords.length} records in timeline',
-                      buttonText: 'View timeline',
-                      tone: 'peach',
-                      icon: Icons.timeline,
-                      onTap: () => onNavigateRoute('timeline'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _buildUtilityCard(
-                      label: 'UPCOMING CARE',
-                      title: 'Appointments\n& health events',
-                      subtitle: '${state.appointments.length} upcoming',
-                      buttonText: 'View calendar',
-                      tone: 'blue',
-                      icon: Icons.calendar_month_outlined,
-                      onTap: () => onNavigateRoute('appointments'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
+              // Block 8: Mediclaim Policy Details
+              _buildMediclaimPolicySection(context),
+              const SizedBox(height: 20),
 
-            // Block 4 & 5: Book Appointment & Find Doctors / Hospitals Near Me
-            _buildBookAppointmentAndNearbySection(context),
-            const SizedBox(height: 20),
+              // Blocks 9 & 10: Health Fund & Emergency Health Loan (Coming Soon)
+              _buildHealthFundAndLoanSection(context),
+              const SizedBox(height: 20),
 
-            // Block 7: Regular Medicines & Order Medicine Online
-            _buildRegularMedicinesSection(context),
-            const SizedBox(height: 20),
-
-            // Block 6: Healthcare Offers & Preventive Discounts
-            _buildHealthOffersSection(context),
-            const SizedBox(height: 20),
-
-            // Block 8: Mediclaim Policy Details
-            _buildMediclaimPolicySection(context),
-            const SizedBox(height: 20),
-
-            // Blocks 9 & 10: Health Fund & Emergency Health Loan (Coming Soon)
-            _buildHealthFundAndLoanSection(context),
-            const SizedBox(height: 20),
-
-            // Family Members Row
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Your family',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
-                          ),
-                          TextButton(
-                            onPressed: () => onNavigateRoute('family'),
-                            child: const Text('Manage'),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: state.members.map((m) {
-                          return GestureDetector(
-                            onTap: () {
-                              state.setMember(m.id);
-                              onNavigateRoute('family');
-                            },
-                            child: Column(
-                              children: [
-                                MemberAvatar(member: m, radius: 24),
-                                const SizedBox(height: 6),
-                                Text(
-                                  m.shortName,
-                                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
-                                ),
-                                Text(
-                                  m.relation,
-                                  style: const TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant),
-                                ),
-                              ],
+              // Family Members Row
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Your family',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                    ],
+                            TextButton(
+                              onPressed: () => onNavigateRoute('family'),
+                              child: const Text('Manage'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: state.members.map((m) {
+                            return GestureDetector(
+                              onTap: () {
+                                state.setMember(m.id);
+                                onNavigateRoute('family');
+                              },
+                              child: Column(
+                                children: [
+                                  MemberAvatar(member: m, radius: 24),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    m.shortName,
+                                    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                                  ),
+                                  Text(
+                                    m.relation,
+                                    style: const TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 24),
-          ],
+              const SizedBox(height: 24),
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-  Widget _buildTopMockupHeader(BuildContext context, String activeMemberName) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFFE2F7F9), Color(0xFFF6FCFD), Color(0xFFF8FAFC)],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
+  Widget _buildTopMockupHeader(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Circular Doctor Avatar with soft glow border
-          Container(
-            width: 58,
-            height: 58,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 2.5),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF0D9488).withValues(alpha: 0.15),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: ClipOval(
-              child: Image.asset(
-                'assets/v2_design/avatar_doctor.png',
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => const Icon(
-                  Icons.person,
-                  size: 32,
-                  color: AppColors.primary,
-                ),
+          // Logo
+          Image.asset(
+            'assets/images/app_logo.png',
+            width: 44,
+            height: 44,
+            fit: BoxFit.contain,
+            errorBuilder: (_, _, _) => Container(
+              width: 44,
+              height: 44,
+              decoration: const BoxDecoration(
+                color: Color(0xFF0F766E),
+                shape: BoxShape.circle,
               ),
+              child: const Icon(Icons.family_restroom, color: Colors.white, size: 24),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 10),
 
-          // Greeting & Subtitle
+          // Title & Subtitle
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Hello,',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF475569),
+                Text(
+                  state.activeMember?.name ?? 'Vikram Sharma',
+                  style: const TextStyle(
+                    fontSize: 19,
+                    fontWeight: FontWeight.w900,
+                    color: Color(0xFF0F172A),
+                    letterSpacing: -0.3,
                   ),
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        activeMemberName,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w900,
-                          color: Color(0xFF0F172A),
-                          letterSpacing: -0.4,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    const Text(
-                      '♡',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF0D9488),
-                      ),
-                    ),
-                  ],
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
                 const Text(
-                  'Your health records, doctors and support - all in one place.',
+                  'Your family’s health companion',
                   style: TextStyle(
-                    fontSize: 11,
-                    height: 1.25,
+                    fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: Color(0xFF64748B),
                   ),
-                ),
-              ],
-            ),
-          ),
-
-          // Right side Slogan illustration + action icons
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.search, color: Color(0xFF334155), size: 22),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    onPressed: () => onNavigateRoute('search'),
-                  ),
-                  const SizedBox(width: 10),
-                  Stack(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.notifications_none, color: Color(0xFF334155), size: 24),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        onPressed: () => onNavigateRoute('notifications'),
-                      ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(3),
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFEF4444),
-                            shape: BoxShape.circle,
-                          ),
-                          constraints: const BoxConstraints(minWidth: 14, minHeight: 14),
-                          child: const Text(
-                            '1',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 9,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Image.asset(
-                'assets/v2_design/header_slogan.png',
-                width: 105,
-                height: 52,
-                fit: BoxFit.contain,
-                errorBuilder: (_, _, _) => const SizedBox(),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPrimary4CardsSection(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: [
-          _buildNativeServiceCard(
-            title: 'My Medical Records',
-            subtitle: 'Store & access your health records anytime, anywhere.',
-            iconAsset: 'assets/v2_design/icon_3d_records.png',
-            gradientColors: const [Color(0xFF28B7D6), Color(0xFF0C8FC0)],
-            titleColor: Colors.white,
-            subtitleColor: const Color(0xFFE0F7FA),
-            buttonColor: const Color(0xFF056A8F),
-            onTap: () => onNavigateTab(2), // Records Locker tab
-          ),
-          _buildNativeServiceCard(
-            title: 'Book Appointment',
-            subtitle: 'Consult with your doctor, at your convenience.',
-            iconAsset: 'assets/v2_design/icon_3d_appointment.png',
-            gradientColors: const [Color(0xFFD6CEF9), Color(0xFFC7D3FE)],
-            titleColor: const Color(0xFF1E293B),
-            subtitleColor: const Color(0xFF475569),
-            buttonColor: const Color(0xFF7C3AED),
-            onTap: () => onNavigateRoute('appointments'),
-          ),
-          _buildNativeServiceCard(
-            title: 'Find Doctors,\nHospitals & Medical Stores',
-            subtitle: 'Locate nearby doctors, hospitals and pharmacies.',
-            iconAsset: 'assets/v2_design/icon_3d_nearby.png',
-            gradientColors: const [Color(0xFFFEF08A), Color(0xFFFDE047)],
-            titleColor: const Color(0xFF78350F),
-            subtitleColor: const Color(0xFF92400E),
-            buttonColor: const Color(0xFFD97706),
-            onTap: () => onNavigateTab(1), // Nearby / Find care tab
-          ),
-          _buildNativeServiceCard(
-            title: 'Offers & Discounts',
-            subtitle: 'Exclusive health & wellness offers.',
-            iconAsset: 'assets/v2_design/icon_3d_offers.png',
-            gradientColors: const [Color(0xFFFCE7F3), Color(0xFFFBCFE8)],
-            titleColor: const Color(0xFF831843),
-            subtitleColor: const Color(0xFF9D174D),
-            buttonColor: const Color(0xFFBE185D),
-            onTap: () => onNavigateRoute('plans'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInsuranceSupportSection(BuildContext context) {
-    return Column(
-      children: [
-        Center(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
-              ),
-              borderRadius: BorderRadius.circular(18),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF2563EB).withValues(alpha: 0.25),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.shield_outlined, color: Colors.white, size: 16),
-                SizedBox(width: 6),
-                Text(
-                  'Insurance & Financial Support',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 12.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 245,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            children: [
-              _buildNativeInsuranceCard(
-                title: 'Mediclaim Policy',
-                subtitle: 'Protect your health with the right policy.',
-                iconAsset: 'assets/v2_design/icon_3d_mediclaim.png',
-                gradientColors: const [Color(0xFFE0F2FE), Color(0xFFBAE6FD)],
-                titleColor: const Color(0xFF0369A1),
-                subtitleColor: const Color(0xFF075985),
-                buttonColor: const Color(0xFF0284C7),
-                onTap: () => onNavigateRoute('insurance'),
-              ),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Row(
-                    children: [
-                      _buildNativeInsuranceCard(
-                        title: 'Health Fund',
-                        subtitle: 'Build your health savings for a secure tomorrow.',
-                        iconAsset: 'assets/v2_design/icon_3d_fund.png',
-                        gradientColors: const [Color(0xFFDCFCE7), Color(0xFFBBF7D0)],
-                        titleColor: const Color(0xFF15803D),
-                        subtitleColor: const Color(0xFF166534),
-                        buttonColor: const Color(0xFF16A34A),
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('MediVault Health Fund is coming soon! Pre-registration open.'),
-                              backgroundColor: Color(0xFF0D9488),
-                            ),
-                          );
-                        },
-                      ),
-                      _buildNativeInsuranceCard(
-                        title: 'Emergency Medical Loan',
-                        subtitle: 'Get quick financial support when you need it most.',
-                        iconAsset: 'assets/v2_design/icon_3d_loan.png',
-                        gradientColors: const [Color(0xFFFFE4E6), Color(0xFFFECDD3)],
-                        titleColor: const Color(0xFFBE123C),
-                        subtitleColor: const Color(0xFF9F1239),
-                        buttonColor: const Color(0xFFE11D48),
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Instant Medical Loan is coming soon in partnership with top lenders.'),
-                              backgroundColor: Color(0xFFEF4444),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  Positioned(
-                    top: 60,
-                    child: IgnorePointer(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.14),
-                              blurRadius: 18,
-                              offset: const Offset(0, 6),
-                            ),
-                          ],
-                          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
-                        ),
-                        child: const Text(
-                          'coming soon',
-                          style: TextStyle(
-                            fontFamily: 'monospace',
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFF2563EB),
-                            letterSpacing: 2.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildQuickInfoMiniCardsSection(BuildContext context) {
-    return SizedBox(
-      height: 145,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: [
-          _buildNativeMiniCard(
-            title: 'Emergency',
-            subtitle: 'One tap. Help is on the way.',
-            iconAsset: 'assets/v2_design/mini_emergency.png',
-            onTap: () => onNavigateRoute('emergency'),
-          ),
-          _buildNativeMiniCard(
-            title: 'Blood Group',
-            subtitle: 'Quick access to your blood group.',
-            iconAsset: 'assets/v2_design/mini_blood.png',
-            onTap: () => _showBloodGroupSheet(context),
-          ),
-          _buildNativeMiniCard(
-            title: 'Medical Conditions',
-            subtitle: 'Keep your conditions updated.',
-            iconAsset: 'assets/v2_design/mini_conditions.png',
-            onTap: () => _showMedicalConditionsSheet(context),
-          ),
-          _buildNativeMiniCard(
-            title: 'Allergies',
-            subtitle: 'Know what to avoid.',
-            iconAsset: 'assets/v2_design/mini_allergies.png',
-            onTap: () => _showAllergiesSheet(context),
-          ),
-          _buildNativeMiniCard(
-            title: 'More',
-            subtitle: 'Additional health information.',
-            iconAsset: 'assets/v2_design/mini_more.png',
-            onTap: () => onNavigateTab(3), // Account / More tab
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNativeMiniCard({
-    required String title,
-    required String subtitle,
-    required String iconAsset,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 122,
-        height: 145,
-        margin: const EdgeInsets.only(right: 10),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE2E8F0)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              iconAsset,
-              height: 46,
-              fit: BoxFit.contain,
-              errorBuilder: (_, _, _) => const Icon(Icons.circle, size: 36),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF0F172A),
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 2),
-            Expanded(
-              child: Text(
-                subtitle,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 8.5,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF64748B),
-                  height: 1.15,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const Icon(
-              Icons.chevron_right,
-              size: 14,
-              color: Color(0xFF0D9488),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNativeServiceCard({
-    required String title,
-    required String subtitle,
-    required String iconAsset,
-    required List<Color> gradientColors,
-    required Color titleColor,
-    required Color subtitleColor,
-    required Color buttonColor,
-    required VoidCallback onTap,
-    double width = 160,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: width,
-        height: 200,
-        margin: const EdgeInsets.only(right: 12),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradientColors,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: gradientColors.last.withValues(alpha: 0.3),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // High-Res 3D Icon
-              Center(
-                child: Image.asset(
-                  iconAsset,
-                  height: 72,
-                  fit: BoxFit.contain,
-                  errorBuilder: (_, _, _) => const Icon(Icons.medical_services, size: 50, color: Colors.white),
-                ),
-              ),
-              const SizedBox(height: 8),
-              // Title
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 13.5,
-                  fontWeight: FontWeight.w900,
-                  color: titleColor,
-                  height: 1.15,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 4),
-              // Subtitle
-              Expanded(
-                child: Text(
-                  subtitle,
-                  style: TextStyle(
-                    fontSize: 9.5,
-                    fontWeight: FontWeight.w500,
-                    color: subtitleColor,
-                    height: 1.2,
-                  ),
-                  maxLines: 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
+              ],
+            ),
+          ),
+
+          // Search button
+          IconButton(
+            icon: const Icon(Icons.search, color: Color(0xFF0F172A), size: 24),
+            onPressed: () => onNavigateRoute('search'),
+          ),
+
+          // Notification button with red badge
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.notifications_none, color: Color(0xFF0F172A), size: 26),
+                onPressed: () => onNavigateRoute('notifications'),
               ),
-              // Bottom Right Arrow
-              Align(
-                alignment: Alignment.bottomRight,
+              Positioned(
+                top: 6,
+                right: 6,
                 child: Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: buttonColor,
+                  padding: const EdgeInsets.all(3.5),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFEF4444),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
-                    Icons.chevron_right,
-                    color: Colors.white,
-                    size: 16,
+                  constraints: const BoxConstraints(minWidth: 15, minHeight: 15),
+                  child: const Text(
+                    '1',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 9,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
 
-  Widget _buildNativeInsuranceCard({
-    required String title,
-    required String subtitle,
-    required String iconAsset,
-    required List<Color> gradientColors,
-    required Color titleColor,
-    required Color subtitleColor,
-    required Color buttonColor,
-    required VoidCallback onTap,
-    double width = 195,
-  }) {
+  Widget _buildTopEmergencySosCard(BuildContext context) {
+    final emergency = state.emergencies[state.selectedMemberId] ??
+        state.emergencies['vikram'];
+    final contactName = emergency?.emergencyContact ?? 'Pooja Sharma';
+    final contactPhone = emergency?.contactPhone ?? '+91 98765 43210';
+
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => onNavigateRoute('emergency'),
       child: Container(
-        width: width,
-        height: 240,
-        margin: const EdgeInsets.only(right: 12),
+        margin: const EdgeInsets.fromLTRB(16, 6, 16, 14),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradientColors,
+          gradient: const LinearGradient(
+            colors: [Color(0xFFFFF0F2), Color(0xFFFFE5E9)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: gradientColors.last.withValues(alpha: 0.5), width: 1),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: const Color(0xFFFFCCD3), width: 1.2),
           boxShadow: [
             BoxShadow(
-              color: gradientColors.last.withValues(alpha: 0.2),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              color: const Color(0xFFF43F5E).withValues(alpha: 0.12),
+              blurRadius: 16,
+              offset: const Offset(0, 5),
             ),
           ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // High-Res 3D Icon
-              Image.asset(
-                iconAsset,
-                height: 80,
-                fit: BoxFit.contain,
-                errorBuilder: (_, _, _) => const Icon(Icons.health_and_safety, size: 60),
-              ),
-              const SizedBox(height: 8),
-              // Title
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14.5,
-                  fontWeight: FontWeight.w900,
-                  color: titleColor,
-                  height: 1.15,
+        child: Row(
+          children: [
+            // Left: 3D Red circular star of life emblem
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: const LinearGradient(
+                  colors: [Color(0xFFFF334B), Color(0xFFDC2626)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFDC2626).withValues(alpha: 0.4),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+                border: Border.all(color: Colors.white.withValues(alpha: 0.45), width: 1.5),
               ),
-              const SizedBox(height: 4),
-              // Subtitle
-              Text(
-                subtitle,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
-                  color: subtitleColor,
-                  height: 1.25,
+              child: const Center(
+                child: Icon(
+                  Icons.emergency,
+                  color: Colors.white,
+                  size: 26,
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
-              const Spacer(),
-              // View Details Button
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            ),
+
+            // Vertical divider
+            Container(
+              height: 36,
+              width: 1,
+              margin: const EdgeInsets.symmetric(horizontal: 12),
+              color: const Color(0xFFFDA4AF).withValues(alpha: 0.6),
+            ),
+
+            // Middle: Text
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        const Text(
+                          '1-Tap Emergency SOS',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w900,
+                            color: Color(0xFF991B1B),
+                            letterSpacing: -0.2,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFDC2626),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: const Text(
+                            '24x7',
+                            style: TextStyle(
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                              letterSpacing: 0.4,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  const Text(
+                    'Get help fast with your Health ID.',
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF64748B),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(width: 8),
+
+            // Right: SOS button
+            GestureDetector(
+              onTap: () => _showEmergencyDialog(context, contactName, contactPhone),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                 decoration: BoxDecoration(
-                  color: buttonColor,
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFFF334B), Color(0xFFDC2626)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: buttonColor.withValues(alpha: 0.35),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
+                      color: const Color(0xFFDC2626).withValues(alpha: 0.4),
+                      blurRadius: 8,
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
-                child: const FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'View Details',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 11,
-                        ),
-                      ),
-                      SizedBox(width: 4),
-                      Icon(Icons.arrow_forward, color: Colors.white, size: 12),
-                    ],
+                child: const Text(
+                  'SOS',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.6,
                   ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBentoGridSection(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: GridView.count(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisCount: 2,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 1.16,
+        children: [
+          _buildBentoCard(
+            title: 'Regular\nMedicines',
+            subtitle: 'Manage your\ndaily medicines',
+            iconAsset: 'assets/healthcare_icons/regular-medicines.png',
+            gradientColors: const [Color(0xFFE8FDF0), Color(0xFFD2F9E0)],
+            borderColor: const Color(0xFFA7F3D0),
+            titleColor: const Color(0xFF064E3B),
+            subtitleColor: const Color(0xFF047857),
+            onTap: () => onNavigateRoute('medicines'),
+          ),
+          _buildBentoCard(
+            title: 'Lab\nReport',
+            subtitle: 'All your\ntest results',
+            iconAsset: 'assets/healthcare_icons/lab-report.png',
+            gradientColors: const [Color(0xFFFFF1EB), Color(0xFFFFDFD3)],
+            borderColor: const Color(0xFFFED7AA),
+            titleColor: const Color(0xFF7C2D12),
+            subtitleColor: const Color(0xFF9A3412),
+            onTap: () {
+              state.setCategory('Lab reports');
+              onNavigateTab(1); // Records tab
+            },
+          ),
+          _buildBentoCard(
+            title: 'Dental\nRecords',
+            subtitle: 'Your dental\ncare history',
+            iconAsset: 'assets/healthcare_icons/dental-records.png',
+            gradientColors: const [Color(0xFFF0F7FF), Color(0xFFDCEBFE)],
+            borderColor: const Color(0xFFBFDBFE),
+            titleColor: const Color(0xFF1E3A8A),
+            subtitleColor: const Color(0xFF1D4ED8),
+            onTap: () => onNavigateRoute('dental'),
+          ),
+          _buildBentoCard(
+            title: 'Mediclaim\nPolicy\nDetails',
+            subtitle: 'Your health\ninsurance\ncover',
+            iconAsset: 'assets/healthcare_icons/mediclaim-policy-details.png',
+            gradientColors: const [Color(0xFFFFFBEB), Color(0xFFFEF3C7)],
+            borderColor: const Color(0xFFFDE68A),
+            titleColor: const Color(0xFF78350F),
+            subtitleColor: const Color(0xFF92400E),
+            onTap: () => onNavigateRoute('insurance'),
+          ),
+          _buildBentoCard(
+            title: 'Health\nFund',
+            subtitle: 'Savings for\nyour healthcare',
+            iconAsset: 'assets/healthcare_icons/health-fund.png',
+            gradientColors: const [Color(0xFFFFF1F2), Color(0xFFFFDFE3)],
+            borderColor: const Color(0xFFFECDD3),
+            titleColor: const Color(0xFF881337),
+            subtitleColor: const Color(0xFF9F1239),
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('MediVault Health Fund: Pre-registration open for healthcare savings!'),
+                  backgroundColor: Color(0xFF0F766E),
+                ),
+              );
+            },
+          ),
+          _buildBentoCard(
+            title: 'Emergency\nHealth Loan',
+            subtitle: 'Financial help\nwhen needed',
+            iconAsset: 'assets/healthcare_icons/emergency-health-loan.png',
+            gradientColors: const [Color(0xFFECFEFF), Color(0xFFD0F8FC)],
+            borderColor: const Color(0xFFA5F3FC),
+            titleColor: const Color(0xFF164E63),
+            subtitleColor: const Color(0xFF0E7490),
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Instant Medical Loans up to ₹5,00,000 for emergency treatments.'),
+                  backgroundColor: Color(0xFFE11D48),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBentoCard({
+    required String title,
+    required String subtitle,
+    required String iconAsset,
+    required List<Color> gradientColors,
+    required Color borderColor,
+    required Color titleColor,
+    required Color subtitleColor,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: gradientColors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: borderColor.withValues(alpha: 0.65), width: 1.2),
+          boxShadow: [
+            BoxShadow(
+              color: borderColor.withValues(alpha: 0.18),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Stack(
+            children: [
+              // 3D Illustration on the right / bottom-right
+              Positioned(
+                right: -6,
+                bottom: -6,
+                width: 86,
+                height: 86,
+                child: Image.asset(
+                  iconAsset,
+                  fit: BoxFit.contain,
+                  errorBuilder: (_, _, _) => const SizedBox(),
+                ),
+              ),
+
+              // Text on the left
+              Padding(
+                padding: const EdgeInsets.fromLTRB(14, 14, 66, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.w900,
+                        color: titleColor,
+                        height: 1.15,
+                        letterSpacing: -0.2,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: subtitleColor,
+                        height: 1.25,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  void _showBloodGroupSheet(BuildContext context) {
-    final activeMember = state.activeMember;
-    final bloodGroup = activeMember?.id == 'vikram' ? 'O+' : 'B+';
-
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (ctx) {
-        return Container(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFEBEE),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: const Icon(Icons.bloodtype, color: Color(0xFFE53935), size: 30),
-                  ),
-                  const SizedBox(width: 14),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${activeMember?.name ?? "Pooja"}\'s Blood Group',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-                      ),
-                      const Text(
-                        'Emergency Quick ID Card',
-                        style: TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE53935),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      bloodGroup,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF8FAFC),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Rh Factor:', style: TextStyle(fontWeight: FontWeight.w600)),
-                        Text('Positive (Rh+)', style: TextStyle(color: Colors.grey.shade800, fontWeight: FontWeight.w700)),
-                      ],
-                    ),
-                    const Divider(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Can Receive From:', style: TextStyle(fontWeight: FontWeight.w600)),
-                        Text(bloodGroup == 'O+' ? 'O+, O-' : 'B+, B-, O+, O-', style: const TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF0D9488))),
-                      ],
-                    ),
-                    const Divider(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Emergency Blood Helpline:', style: TextStyle(fontWeight: FontWeight.w600)),
-                        const Text('104 / 1910', style: TextStyle(fontWeight: FontWeight.w800, color: Color(0xFFE53935))),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pop(ctx);
-                    onNavigateRoute('emergency');
-                  },
-                  icon: const Icon(Icons.share, size: 18),
-                  label: const Text('Share Emergency Medical ID'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFE53935),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showMedicalConditionsSheet(BuildContext context) {
-    final activeMember = state.activeMember;
-
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (ctx) {
-        return Container(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE0F2FE),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: const Icon(Icons.assignment, color: Color(0xFF0284C7), size: 28),
-                  ),
-                  const SizedBox(width: 14),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${activeMember?.name ?? "Pooja"}\'s Conditions',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-                      ),
-                      const Text(
-                        'Active medical tags & history',
-                        style: TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 18),
-              const ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Icon(Icons.check_circle, color: Color(0xFF10B981)),
-                title: Text('Hypertension (Mild)', style: TextStyle(fontWeight: FontWeight.w700)),
-                subtitle: Text('Under control with Telmisartan 40mg • Doctor reviewed'),
-              ),
-              const Divider(),
-              const ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Icon(Icons.check_circle, color: Color(0xFF10B981)),
-                title: Text('Seasonal Bronchial Sensitivity', style: TextStyle(fontWeight: FontWeight.w700)),
-                subtitle: Text('Monitored during winter • Inhaler on record'),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.pop(ctx),
-                      child: const Text('Close'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(ctx);
-                        onNavigateTab(2); // Records
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0284C7),
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text('View All Records'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showAllergiesSheet(BuildContext context) {
-    final activeMember = state.activeMember;
-
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (ctx) {
-        return Container(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF7ED),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: const Icon(Icons.warning_amber_rounded, color: Color(0xFFEA580C), size: 28),
-                  ),
-                  const SizedBox(width: 14),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${activeMember?.name ?? "Pooja"}\'s Allergies',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-                      ),
-                      const Text(
-                        'Critical warnings for prescribing doctors',
-                        style: TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 18),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFEF2F2),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFFCA5A5)),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.block, color: Color(0xFFDC2626), size: 22),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Penicillin & Amoxicillin',
-                            style: TextStyle(fontWeight: FontWeight.w800, color: Color(0xFFDC2626), fontSize: 14),
-                          ),
-                          Text(
-                            'Severity: High (Causes urticaria/rash)',
-                            style: TextStyle(color: Color(0xFF7F1D1D), fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFFBEB),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFFCD34D)),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.warning_outlined, color: Color(0xFFD97706), size: 22),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Peanuts & Tree Nuts',
-                            style: TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF92400E), fontSize: 14),
-                          ),
-                          Text(
-                            'Severity: Moderate (Gastric irritation)',
-                            style: TextStyle(color: Color(0xFF78350F), fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 18),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pop(ctx);
-                    onNavigateRoute('emergency');
-                  },
-                  icon: const Icon(Icons.health_and_safety, size: 18),
-                  label: const Text('Update In Emergency Medical ID'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFEA580C),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 
@@ -1305,120 +738,6 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(width: 4),
                 const Icon(Icons.arrow_forward, size: 12, color: AppColors.primary),
               ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEmergencySosBar(BuildContext context) {
-    final emergency = state.emergencies[state.selectedMemberId] ??
-        state.emergencies['vikram'];
-    final contactName = emergency?.emergencyContact ?? 'Pooja Sharma';
-    final contactPhone = emergency?.contactPhone ?? '+91 98765 43210';
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFFFEF2F2), Color(0xFFFEE2E2)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: const Color(0xFFFECACA)),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFFEF4444).withValues(alpha: 0.12),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: const Color(0xFFEF4444),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFFEF4444).withValues(alpha: 0.35),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: const Icon(Icons.emergency, color: Colors.white, size: 22),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Text(
-                        '1-Tap Emergency SOS',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF991B1B),
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFDC2626),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: const Text(
-                          '24x7',
-                          style: TextStyle(
-                            fontSize: 9,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Ambulance 108 · ICE: $contactName ($contactPhone)',
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: Color(0xFF7F1D1D),
-                      fontWeight: FontWeight.w500,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            ElevatedButton(
-              onPressed: () => _showEmergencyDialog(context, contactName, contactPhone),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFDC2626),
-                foregroundColor: Colors.white,
-                elevation: 0,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                minimumSize: Size.zero,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                'SOS',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
-              ),
             ),
           ],
         ),

@@ -65,6 +65,7 @@ flutter:
     - assets/photos/
     - assets/images/
     - assets/v2_design/
+    - assets/healthcare_icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
