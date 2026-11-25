@@ -7,5 +7,6 @@ void main() {
     expect(find.text('Vikram Sharma'), findsOneWidget);
     expect(find.text('1-Tap Emergency SOS'), findsOneWidget);
     expect(find.text('Essential Healthcare'), findsOneWidget);
+    expect(find.text('Offers & Preventive Care'), findsOneWidget);
   });
 }

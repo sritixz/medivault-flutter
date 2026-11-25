@@ -82,6 +82,10 @@ class HomeScreen extends StatelessWidget {
               _buildBentoGridSection(context),
               const SizedBox(height: 22),
 
+              // Block 6: Healthcare Offers & Preventive Discounts (Directly below Essential Healthcare)
+              _buildHealthOffersSection(context),
+              const SizedBox(height: 22),
+
               // Member Selector Pills
               MemberPills(
                 members: state.members,
@@ -158,10 +162,6 @@ class HomeScreen extends StatelessWidget {
 
               // Block 7: Regular Medicines & Order Medicine Online
               _buildRegularMedicinesSection(context),
-              const SizedBox(height: 20),
-
-              // Block 6: Healthcare Offers & Preventive Discounts
-              _buildHealthOffersSection(context),
               const SizedBox(height: 20),
 
               // Block 8: Mediclaim Policy Details
@@ -1943,9 +1943,11 @@ class HomeScreen extends StatelessWidget {
 
           // Horizontal Offers Scroll
           SizedBox(
-            height: 140,
+            height: 148,
             child: ListView(
               scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              clipBehavior: Clip.none,
               children: [
                 _buildOfferCard(
                   title: 'Full Body Health Checkup',
